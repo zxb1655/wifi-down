@@ -1,0 +1,522 @@
+[14:28:55] 配置文件: D:\project\wifi-down\config.json
+[14:28:55] 日志目录: D:\project\wifi-down\logs
+[14:29:18] 测试已停止
+[14:29:26] 测试已停止
+[14:29:33] 测试已停止
+[14:29:38] 测试已停止
+[14:29:44] 测试已停止
+[14:29:52] 测试已停止
+[14:30:09] 配置文件: D:\project\wifi-down\config.json
+[14:30:09] 日志目录: D:\project\wifi-down\logs
+[14:32:03] 配置文件: D:\project\wifi-down\config.json
+[14:32:03] 日志目录: D:\project\wifi-down\logs
+[14:32:15] 测试链接: https://speed.cloudflare.com/__down?bytes=10000000
+[14:32:26] 测试已停止
+[14:32:34] 测试已停止
+[14:32:39] 配置文件: D:\project\wifi-down\config.json
+[14:32:39] 日志目录: D:\project\wifi-down\logs
+[14:32:53] 测试已停止
+[14:32:58] 测试已停止
+[14:33:02] 测试已停止
+[14:33:06] 测试已停止
+[14:33:17] 测试已停止
+[14:33:29] 测试已停止
+[14:33:46] 测试已停止
+[14:33:46] 测试已停止
+[14:33:54] 测试已停止
+[14:34:12] 测试已停止
+[14:34:12] 测试已停止
+[14:34:18] 测试已停止
+[14:34:23] 测试已停止
+[14:34:46] 测试已停止
+[14:34:50] 配置文件: D:\project\wifi-down\config.json
+[14:34:50] 日志目录: D:\project\wifi-down\logs
+[14:34:57] 测试已停止
+[14:35:05] 测试已停止
+[14:35:10] 测试已停止
+[14:35:14] 测试已停止
+[14:35:19] 测试已停止
+[14:35:32] 测试已停止
+[14:35:37] 测试已停止
+[14:35:42] 测试已停止
+[14:35:45] 测试已停止
+[14:35:59] 配置文件: D:\project\wifi-down\config.json
+[14:35:59] 日志目录: D:\project\wifi-down\logs
+[14:36:13] 测试已停止
+[14:36:18] 测试已停止
+[14:36:25] 测试已停止
+[14:36:32] 测试已停止
+[14:36:43] 测试已停止
+[14:36:53] 配置文件: D:\project\wifi-down\config.json
+[14:36:53] 日志目录: D:\project\wifi-down\logs
+[14:36:56] 测试链接: https://speed.cloudflare.com/__down?bytes=10000000
+[14:37:14] 测试已停止
+[14:37:35] 测试已停止
+[14:37:35] 测试已停止
+[14:37:35] 测试已停止
+[14:39:22] 配置文件: D:\project\wifi-down\config.json
+[14:39:22] 日志目录: D:\project\wifi-down\logs
+[14:39:39] 配置文件: D:\project\wifi-down\config.json
+[14:39:39] 日志目录: D:\project\wifi-down\logs
+[14:39:45] 测试链接: https://dldir1.qq.com/qqfile/qq/PCQQ9.7.22/QQ9.7.22.29315.exe
+[14:41:26] 配置文件: D:\project\wifi-down\config.json
+[14:41:26] 日志目录: D:\project\wifi-down\logs
+[14:41:29] 测试链接: https://dldir1.qq.com/qqfile/qq/PCQQ9.7.22/QQ9.7.22.29315.exe
+[14:41:33] 测试已停止
+[14:41:39] 测试已停止
+[14:41:40] 测试已停止
+[14:41:40] 测试已停止
+[14:41:40] 测试已停止
+[14:41:40] 测试已停止
+[14:42:18] 测试已停止
+[14:42:27] 测试已停止
+[14:47:51] 配置文件: D:\project\wifi-down\config.json
+[14:47:51] 日志目录: D:\project\wifi-down\logs
+[14:48:27] 测试已停止
+[14:49:02] 配置文件: D:\project\wifi-down\config.json
+[14:49:02] 日志目录: D:\project\wifi-down\logs
+[14:49:13] 获取到 7 个待测速设备
+[14:49:17] 正在触发 WiFi 扫描，请等待...
+[14:49:23] 扫描完成，发现 11 个 WiFi 网络
+[14:51:23] 配置文件: D:\project\wifi-down\config.json
+[14:51:23] 日志目录: D:\project\wifi-down\logs
+[14:51:59] 配置文件: D:\project\wifi-down\config.json
+[14:51:59] 日志目录: D:\project\wifi-down\logs
+[14:52:13] 正在触发 WiFi 扫描，请等待...
+[14:52:17] 获取到 7 个待测速设备
+[14:52:18] 扫描完成，发现 10 个 WiFi 网络
+[14:52:26] ===== 单设备跑量: 56132045000001 =====
+[14:52:26] 正在扫描 WiFi 网络...
+[14:52:31] 扫描到 10 个网络
+[14:52:31] --- 处理设备: 56132045000001 (JHKJ_5G) ---
+[14:52:31] WiFi "JHKJ_5G" 已匹配，信号: 86%
+[14:52:31] 正在连接 WiFi "JHKJ_5G"...
+[14:52:34] 已连接到 "JHKJ_5G"
+[14:52:34] 开始跑流量，目标约 120 MB...
+[15:01:52] 配置文件: D:\project\wifi-down\config.json
+[15:01:52] 日志目录: D:\project\wifi-down\logs
+[15:01:57] 正在触发 WiFi 扫描，请等待...
+[15:02:00] 获取到 7 个待测速设备
+[15:02:02] 扫描完成，发现 13 个 WiFi 网络
+[15:02:07] ===== 单设备跑量: 56132045000001 =====
+[15:02:07] 正在扫描 WiFi 网络...
+[15:02:12] 扫描到 13 个网络
+[15:02:12] --- 处理设备: 56132045000001 (JHKJ_5G) ---
+[15:02:12] WiFi "JHKJ_5G" 已匹配，信号: 87%
+[15:02:12] 正在连接 WiFi "JHKJ_5G"...
+[15:02:37] 连接失败: 连接 WiFi "JHKJ_5G" 超时
+[15:02:37] 上报结果: 56132045000001, 流量=0MB, 状态=失败
+[15:02:37] 上报成功: 56132045000001
+[15:02:37] ===== 单设备跑量完成 =====
+[15:02:54] 获取到 7 个待测速设备
+[15:03:47] 配置文件: D:\project\wifi-down\config.json
+[15:03:47] 日志目录: D:\project\wifi-down\logs
+[15:03:49] 获取到 7 个待测速设备
+[15:05:14] 获取到 7 个待测速设备
+[15:05:17] ===== 单设备跑量: 56132045000001 =====
+[15:05:17] 正在扫描 WiFi 网络...
+[15:05:22] 扫描到 10 个网络
+[15:05:22] --- 处理设备: 56132045000001 (JHKJ_5G) ---
+[15:05:22] 未找到 WiFi "JHKJ_5G"，重试扫描 (1/3)...
+[15:05:29] WiFi "JHKJ_5G" 已匹配，信号: 86%
+[15:05:29] 正在连接 WiFi "JHKJ_5G"...
+[15:05:32] 已确认当前 WiFi 为「JHKJ_5G」
+[15:05:32] 开始跑流量，目标约 148 MB...
+[15:05:44] 跑量完成: 101.51 MB
+[15:05:44] 断开 WiFi "JHKJ_5G"...
+[15:05:45] 上报结果: 56132045000001, 流量=102MB, 状态=成功
+[15:05:45] 上报失败: request to http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com
+[15:05:45] 警告: 设备 56132045000001 的结果未能成功上报
+[15:05:45] --- 设备 56132045000001 处理完毕 ---
+[15:05:45] ===== 单设备跑量完成 =====
+[15:06:48] 配置文件: D:\project\wifi-down\config.json
+[15:06:48] 日志目录: D:\project\wifi-down\logs
+[15:07:31] 正在触发 WiFi 扫描，请等待...
+[15:07:32] 获取到 7 个待测速设备
+[15:07:36] 扫描完成，发现 12 个 WiFi 网络
+[15:07:44] ===== 单设备跑量: 56132044000075 =====
+[15:07:44] 正在扫描 WiFi 网络...
+[15:07:49] 扫描到 11 个网络
+[15:07:49] --- 处理设备: 56132044000075 (JH-1911_5G) ---
+[15:07:49] WiFi "JH-1911_5G" 已匹配，信号: 87%
+[15:07:49] 正在连接 WiFi "JH-1911_5G"...
+[15:07:52] 已确认当前 WiFi 为「JH-1911_5G」
+[15:07:52] 开始跑流量，目标约 177 MB...
+[15:09:10] 跑量完成: 121.58 MB
+[15:09:10] 断开 WiFi "JH-1911_5G"...
+[15:09:11] 上报结果: 56132044000075, 流量=122MB, 状态=成功
+[15:09:11] 上报失败: request to http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com
+[15:09:11] 尝试连接备用 WiFi "JHKJ_5G" 进行上报...
+[15:09:28] 连接备用 WiFi 失败: 连接 WiFi "JHKJ_5G" 超时
+[15:09:28] 警告: 设备 56132044000075 的结果未能成功上报
+[15:09:28] --- 设备 56132044000075 处理完毕 ---
+[15:09:28] ===== 单设备跑量完成 =====
+[15:09:56] 配置文件: D:\project\wifi-down\config.json
+[15:09:56] 日志目录: D:\project\wifi-down\logs
+[15:09:58] 获取设备列表失败: request to http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com
+[15:09:58] 正在触发 WiFi 扫描，请等待...
+[15:10:04] 扫描完成，发现 13 个 WiFi 网络
+[15:10:42] 获取到 7 个待测速设备
+[15:10:47] ===== 单设备跑量: 56132044000075 =====
+[15:10:47] 正在扫描 WiFi 网络...
+[15:10:52] 扫描到 10 个网络
+[15:10:52] --- 处理设备: 56132044000075 (JH-1911_5G) ---
+[15:10:52] WiFi "JH-1911_5G" 已匹配，信号: 85%
+[15:10:52] 正在连接 WiFi "JH-1911_5G"...
+[15:10:55] 已确认当前 WiFi 为「JH-1911_5G」
+[15:10:55] 开始跑流量，目标约 119 MB...
+[15:11:11] 配置文件: D:\project\wifi-down\config.json
+[15:11:11] 日志目录: D:\project\wifi-down\logs
+[15:11:21] 获取到 7 个待测速设备
+[15:11:22] 正在触发 WiFi 扫描，请等待...
+[15:11:27] 扫描完成，发现 8 个 WiFi 网络
+[15:11:28] ===== 单设备跑量: 56132044000075 =====
+[15:11:28] 正在扫描 WiFi 网络...
+[15:11:33] 扫描到 12 个网络
+[15:11:33] --- 处理设备: 56132044000075 (JH-1911_5G) ---
+[15:11:33] WiFi "JH-1911_5G" 已匹配，信号: 87%
+[15:11:33] 正在连接 WiFi "JH-1911_5G"...
+[15:11:36] 已确认当前 WiFi 为「JH-1911_5G」
+[15:11:36] 开始跑流量，目标约 152 MB...
+[15:12:09] 跑量完成: 149.06 MB
+[15:12:09] 断开 WiFi "JH-1911_5G"...
+[15:12:10] 上报结果: 56132044000075, 流量=149MB, 状态=成功
+[15:12:10] 上报失败: request to http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com
+[15:12:10] 尝试连接备用 WiFi "JHKJ_5G" 进行上报...
+[15:12:16] [备用] 已确认当前 WiFi 为「JHKJ_5G」
+[15:12:18] 上报成功: 56132044000075
+[15:12:20] --- 设备 56132044000075 处理完毕 ---
+[15:12:20] ===== 单设备跑量完成 =====
+[15:16:08] 配置文件: D:\project\wifi-down\config.json
+[15:16:08] 日志目录: D:\project\wifi-down\logs
+[15:18:02] 配置文件: D:\project\wifi-down\config.json
+[15:18:03] 日志目录: D:\project\wifi-down\logs
+[15:18:08] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[15:18:08] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[15:18:08] 获取到 6 个待测速设备
+[15:18:13] 正在触发 WiFi 扫描，请等待...
+[15:18:19] 扫描完成，发现 7 个 WiFi 网络
+[15:18:27] ===== 单设备跑量: 56132044000076 =====
+[15:18:27] 正在扫描 WiFi 网络...
+[15:18:32] 扫描到 11 个网络
+[15:18:32] --- 处理设备: 56132044000076 (JHKJ_2.4G) ---
+[15:18:32] WiFi "JHKJ_2.4G" 已匹配，信号: 80%
+[15:18:32] 正在连接 WiFi "JHKJ_2.4G"...
+[15:18:35] 已确认当前 WiFi 为「JHKJ_2.4G」
+[15:18:35] 开始跑流量，目标约 136 MB...
+[15:18:35] [下载] 当前链接: https://cdn.npmmirror.com/packages/node/v20.18.0/node-v20.18.0-linux-x64.tar.gz
+[15:18:36] [下载] 当前链接: https://cdn.npmmirror.com/packages/node/v20.18.0/node-v20.18.0-linux-x64.tar.gz
+[15:18:37] [下载] 当前链接: https://mirrors.aliyun.com/apache/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+[15:18:38] [下载] 当前链接: https://dldir1.qq.com/qqfile/qq/PCQQ9.7.22/QQ9.7.22.29315.exe
+[15:19:15] 跑量完成: 147.16 MB
+[15:19:15] 上报结果: 56132044000076, 流量=147MB, 状态=成功
+[15:19:15] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:19:15] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"***","useFlow":147,"status":1,"speedStartTime":"2026-03-27 15:18:35","speedEndTime":"2026-03-27 15:19:15"}
+[15:19:15] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:19:15] 上报成功: 56132044000076
+[15:19:15] 断开 WiFi "JHKJ_2.4G"...
+[15:19:16] --- 设备 56132044000076 处理完毕 ---
+[15:19:16] ===== 单设备跑量完成 =====
+[15:19:24] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[15:19:24] 获取设备列表失败（request to http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com），尝试连接备用 WiFi「JHKJ_5G」后重试...
+[15:19:34] [备用] 已确认当前 WiFi 为「JHKJ_5G」
+[15:19:34] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[15:19:34] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[15:19:34] 获取到 5 个待测速设备
+[15:24:24] 配置文件: D:\project\wifi-down\config.json
+[15:24:24] 日志目录: D:\project\wifi-down\logs
+[15:24:26] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[15:24:26] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[15:24:26] 获取到 7 个待测速设备
+[15:25:03] 配置文件: D:\project\wifi-down\config.json
+[15:25:03] 日志目录: D:\project\wifi-down\logs
+[15:25:10] ===== 开始跑量任务 =====
+[15:25:10] 正在获取设备列表...
+[15:25:10] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[15:25:10] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[15:25:10] 获取到 7 个设备
+[15:25:10] 正在扫描 WiFi 网络...
+[15:25:15] 扫描到 10 个网络
+[15:25:15] --- 处理设备: 56132044000038 (JH-000020) ---
+[15:25:15] 未找到 WiFi "JH-000020"，重试扫描 (1/3)...
+[15:25:22] 未找到 WiFi "JH-000020"，重试扫描 (2/3)...
+[15:25:29] 未找到 WiFi "JH-000020"，重试扫描 (3/3)...
+[15:25:37] WiFi "JH-000020" 未发现，标记为失败
+[15:25:37] 上报结果: 56132044000038, 流量=0MB, 状态=失败
+[15:25:37] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:25:37] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 15:25:37","speedEndTime":"2026-03-27 15:25:37"}
+[15:25:37] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:25:37] 上报成功: 56132044000038
+[15:25:37] --- 处理设备: 56132044000041 (Jhwifi-000041) ---
+[15:25:37] 未找到 WiFi "Jhwifi-000041"，重试扫描 (1/3)...
+[15:25:44] 未找到 WiFi "Jhwifi-000041"，重试扫描 (2/3)...
+[15:25:51] 未找到 WiFi "Jhwifi-000041"，重试扫描 (3/3)...
+[15:25:54] 任务已停止
+[15:27:07] 配置文件: D:\project\wifi-down\config.json
+[15:27:07] 日志目录: D:\project\wifi-down\logs
+[15:27:21] ===== 开始跑量任务 =====
+[15:27:21] 正在获取设备列表...
+[15:27:21] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[15:27:21] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[15:27:21] 获取到 7 个设备
+[15:27:21] 正在扫描 WiFi 网络...
+[15:27:26] 扫描到 9 个网络
+[15:27:26] --- 处理设备: 56132044000038 (JH-000020) ---
+[15:27:26] 未找到 WiFi "JH-000020"，重试扫描 (1/3)...
+[15:27:33] 未找到 WiFi "JH-000020"，重试扫描 (2/3)...
+[15:27:40] 未找到 WiFi "JH-000020"，重试扫描 (3/3)...
+[15:27:47] WiFi "JH-000020" 未发现，标记为失败
+[15:27:47] 上报结果: 56132044000038, 流量=0MB, 状态=失败
+[15:27:47] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:27:47] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 15:27:47","speedEndTime":"2026-03-27 15:27:47"}
+[15:27:47] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:27:47] 上报成功: 56132044000038
+[15:27:47] --- 处理设备: 56132044000041 (Jhwifi-000041) ---
+[15:27:47] 未找到 WiFi "Jhwifi-000041"，重试扫描 (1/3)...
+[15:27:54] 未找到 WiFi "Jhwifi-000041"，重试扫描 (2/3)...
+[15:28:02] 未找到 WiFi "Jhwifi-000041"，重试扫描 (3/3)...
+[15:28:09] WiFi "Jhwifi-000041" 未发现，标记为失败
+[15:28:09] 上报结果: 56132044000041, 流量=0MB, 状态=失败
+[15:28:09] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:28:09] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 15:28:09","speedEndTime":"2026-03-27 15:28:09"}
+[15:28:09] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:28:09] 上报成功: 56132044000041
+[15:28:09] --- 处理设备: 56132044000042 (TEST_7) ---
+[15:28:09] 未找到 WiFi "TEST_7"，重试扫描 (1/3)...
+[15:28:16] 未找到 WiFi "TEST_7"，重试扫描 (2/3)...
+[15:28:23] 未找到 WiFi "TEST_7"，重试扫描 (3/3)...
+[15:28:30] WiFi "TEST_7" 未发现，标记为失败
+[15:28:30] 上报结果: 56132044000042, 流量=0MB, 状态=失败
+[15:28:30] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:28:30] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 15:28:30","speedEndTime":"2026-03-27 15:28:30"}
+[15:28:30] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:28:30] 上报成功: 56132044000042
+[15:28:30] --- 处理设备: 56132045000001 (JHKJ_5G) ---
+[15:28:30] WiFi "JHKJ_5G" 已匹配，信号: 87%
+[15:28:30] 正在连接 WiFi "JHKJ_5G"...
+[15:28:33] 已确认当前 WiFi 为「JHKJ_5G」
+[15:28:33] 开始跑流量，目标约 192 MB...
+[15:28:33] [下载] 当前链接: https://registry.npmmirror.com/-/binary/python/3.12.8/python-3.12.8-amd64.exe
+[15:28:33] [下载] 当前链接: https://cdn.npmmirror.com/binaries/python/3.12.8/python-3.12.8-amd64.exe
+[15:28:37] [下载] 当前链接: https://mirrors.huaweicloud.com/apache/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+[15:28:39] [下载] 当前链接: https://dldir1.qq.com/music/clntupate/QQMusic_Setup.exe
+[15:28:48] [下载] 当前链接: https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe
+[15:29:02] 跑量完成: 149.55 MB
+[15:29:02] 上报结果: 56132045000001, 流量=150MB, 状态=成功
+[15:29:02] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:29:02] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"***","useFlow":150,"status":1,"speedStartTime":"2026-03-27 15:28:33","speedEndTime":"2026-03-27 15:29:02"}
+[15:29:02] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:29:02] 上报成功: 56132045000001
+[15:29:02] 断开 WiFi "JHKJ_5G"...
+[15:29:03] --- 设备 56132045000001 处理完毕 ---
+[15:29:03] --- 处理设备: 56132044000076 (JHKJ_2.4G) ---
+[15:29:03] WiFi "JHKJ_2.4G" 已匹配，信号: 88%
+[15:29:03] 正在连接 WiFi "JHKJ_2.4G"...
+[15:29:06] 已确认当前 WiFi 为「JHKJ_2.4G」
+[15:29:06] 开始跑流量，目标约 173 MB...
+[15:29:06] [下载] 当前链接: https://mirrors.huaweicloud.com/apache/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+[15:29:28] [下载] 当前链接: https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe
+[15:30:23] 跑量完成: 174.60 MB
+[15:30:23] 上报结果: 56132044000076, 流量=175MB, 状态=成功
+[15:30:23] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:30:23] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"***","useFlow":175,"status":1,"speedStartTime":"2026-03-27 15:29:06","speedEndTime":"2026-03-27 15:30:23"}
+[15:30:23] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:30:23] 上报成功: 56132044000076
+[15:30:23] 断开 WiFi "JHKJ_2.4G"...
+[15:30:24] --- 设备 56132044000076 处理完毕 ---
+[15:30:24] --- 处理设备: 56132044000075 (JH-1911_5G) ---
+[15:30:24] WiFi "JH-1911_5G" 已匹配，信号: 86%
+[15:30:24] 正在连接 WiFi "JH-1911_5G"...
+[15:30:29] 已确认当前 WiFi 为「JH-1911_5G」
+[15:30:29] 开始跑流量，目标约 115 MB...
+[15:30:29] [下载] 当前链接: https://mirrors.huaweicloud.com/apache/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+[15:30:30] [下载] 当前链接: https://dldir1.qq.com/qqfile/qq/PCQQ9.7.22/QQ9.7.22.29315.exe
+[15:30:42] 跑量完成: 168.19 MB
+[15:30:42] 上报结果: 56132044000075, 流量=168MB, 状态=成功
+[15:30:42] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:30:42] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"***","useFlow":168,"status":1,"speedStartTime":"2026-03-27 15:30:29","speedEndTime":"2026-03-27 15:30:42"}
+[15:30:42] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:30:42] 上报成功: 56132044000075
+[15:30:42] 断开 WiFi "JH-1911_5G"...
+[15:30:43] --- 设备 56132044000075 处理完毕 ---
+[15:30:43] --- 处理设备: 56132044000074 (0) ---
+[15:30:43] 未找到 WiFi "0"，重试扫描 (1/3)...
+[15:30:50] 未找到 WiFi "0"，重试扫描 (2/3)...
+[15:30:57] 未找到 WiFi "0"，重试扫描 (3/3)...
+[15:31:04] WiFi "0" 未发现，标记为失败
+[15:31:04] 上报结果: 56132044000074, 流量=0MB, 状态=失败
+[15:31:04] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:31:04] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000074","wifiName":"0","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 15:31:04","speedEndTime":"2026-03-27 15:31:04"}
+[15:31:04] 上报失败: request to http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com
+[15:31:04] 尝试连接备用 WiFi "JHKJ_5G" 进行上报...
+[15:31:07] [备用] 已确认当前 WiFi 为「JHKJ_5G」
+[15:31:09] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[15:31:09] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000074","wifiName":"0","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 15:31:04","speedEndTime":"2026-03-27 15:31:04"}
+[15:31:09] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[15:31:09] 上报成功: 56132044000074
+[15:31:10] ===== 跑量任务完成 =====
+[15:32:52] 配置文件: D:\project\wifi-down\config.json
+[15:32:52] 日志目录: D:\project\wifi-down\logs
+[15:59:46] 配置文件: D:\project\wifi-down\config.json
+[15:59:46] 日志目录: D:\project\wifi-down\logs
+[16:03:34] 配置文件: D:\project\wifi-down\config.json
+[16:03:34] 日志目录: D:\project\wifi-down\logs
+[16:03:36] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[16:03:36] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[16:03:36] 获取到 4 个待测速设备
+[16:04:23] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[16:04:23] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[16:04:23] 获取到 7 个待测速设备
+[16:04:29] ===== 开始跑量任务 =====
+[16:04:29] 正在获取设备列表...
+[16:04:29] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[16:04:30] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[16:04:30] 获取到 7 个设备
+[16:04:30] 正在扫描 WiFi 网络...
+[16:04:35] 扫描到 9 个网络
+[16:04:35] --- 处理设备: 56132044000038 (JH-000020) ---
+[16:04:35] 未找到 WiFi "JH-000020"，重试扫描 (1/3)...
+[16:04:42] 未找到 WiFi "JH-000020"，重试扫描 (2/3)...
+[16:04:49] 未找到 WiFi "JH-000020"，重试扫描 (3/3)...
+[16:04:56] WiFi "JH-000020" 未发现，标记为失败
+[16:04:56] 上报结果: 56132044000038, 流量=0MB, 状态=失败
+[16:04:56] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:04:56] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:04:56","speedEndTime":"2026-03-27 16:04:56"}
+[16:04:56] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:04:56] 上报成功: 56132044000038
+[16:04:56] --- 处理设备: 56132044000041 (Jhwifi-000041) ---
+[16:04:56] 未找到 WiFi "Jhwifi-000041"，重试扫描 (1/3)...
+[16:05:03] 未找到 WiFi "Jhwifi-000041"，重试扫描 (2/3)...
+[16:05:10] 未找到 WiFi "Jhwifi-000041"，重试扫描 (3/3)...
+[16:05:17] WiFi "Jhwifi-000041" 未发现，标记为失败
+[16:05:17] 上报结果: 56132044000041, 流量=0MB, 状态=失败
+[16:05:17] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:05:17] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:05:17","speedEndTime":"2026-03-27 16:05:17"}
+[16:05:17] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:05:17] 上报成功: 56132044000041
+[16:05:17] --- 处理设备: 56132044000042 (TEST_7) ---
+[16:05:17] 未找到 WiFi "TEST_7"，重试扫描 (1/3)...
+[16:05:24] 未找到 WiFi "TEST_7"，重试扫描 (2/3)...
+[16:05:32] 未找到 WiFi "TEST_7"，重试扫描 (3/3)...
+[16:05:39] WiFi "TEST_7" 未发现，标记为失败
+[16:05:39] 上报结果: 56132044000042, 流量=0MB, 状态=失败
+[16:05:39] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:05:39] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:05:39","speedEndTime":"2026-03-27 16:05:39"}
+[16:05:39] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:05:39] 上报成功: 56132044000042
+[16:05:39] --- 处理设备: 56132045000001 (JHKJ_5G) ---
+[16:05:39] WiFi "JHKJ_5G" 已匹配，信号: 85%
+[16:05:39] 正在连接 WiFi "JHKJ_5G"...
+[16:05:42] 已确认当前 WiFi 为「JHKJ_5G」
+[16:05:42] 开始跑流量，目标约 181 MB...
+[16:05:42] [下载] 当前链接: https://dldir1v6.qq.com/weixin/Universal/Windows/WeChatWin_4.1.8.exe
+[16:05:48] 跑量完成: 140.39 MB
+[16:05:48] 上报结果: 56132045000001, 流量=140MB, 状态=成功
+[16:05:48] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:05:48] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"***","useFlow":140,"status":1,"speedStartTime":"2026-03-27 16:05:42","speedEndTime":"2026-03-27 16:05:48"}
+[16:05:48] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:05:48] 上报成功: 56132045000001
+[16:05:48] 断开 WiFi "JHKJ_5G"...
+[16:05:49] --- 设备 56132045000001 处理完毕 ---
+[16:05:49] --- 处理设备: 56132044000076 (JHKJ_2.4G) ---
+[16:05:49] WiFi "JHKJ_2.4G" 已匹配，信号: 79%
+[16:05:49] 正在连接 WiFi "JHKJ_2.4G"...
+[16:05:52] 已确认当前 WiFi 为「JHKJ_2.4G」
+[16:05:52] 开始跑流量，目标约 167 MB...
+[16:05:52] [下载] 当前链接: https://down.sandai.net/mac/thunder_5.80.5.66632.dmg
+[16:06:19] [下载] 当前链接: https://dldir1v6.qq.com/qqfile/qq/QQNT/Windows/QQ_9.9.28_260319_x64_01.exe
+[16:06:19] 跑量完成: 110.06 MB
+[16:06:19] 上报结果: 56132044000076, 流量=110MB, 状态=成功
+[16:06:19] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:06:19] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"***","useFlow":110,"status":1,"speedStartTime":"2026-03-27 16:05:52","speedEndTime":"2026-03-27 16:06:19"}
+[16:06:19] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:06:19] 上报成功: 56132044000076
+[16:06:19] 断开 WiFi "JHKJ_2.4G"...
+[16:06:20] --- 设备 56132044000076 处理完毕 ---
+[16:06:20] --- 处理设备: 56132044000075 (JH-1911_5G) ---
+[16:06:20] WiFi "JH-1911_5G" 已匹配，信号: 85%
+[16:06:20] 正在连接 WiFi "JH-1911_5G"...
+[16:06:25] 已确认当前 WiFi 为「JH-1911_5G」
+[16:06:25] 开始跑流量，目标约 127 MB...
+[16:06:25] [下载] 当前链接: https://xmp.down.sandai.net/xmp/XMPSetup6.2.6.622xmpdl.exe
+[16:06:31] [下载] 当前链接: https://dldir1v6.qq.com/weixin/Universal/Windows/WeChatWin_4.1.8.exe
+[16:06:35] 跑量完成: 141.43 MB
+[16:06:35] 上报结果: 56132044000075, 流量=141MB, 状态=成功
+[16:06:35] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:06:35] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"***","useFlow":141,"status":1,"speedStartTime":"2026-03-27 16:06:25","speedEndTime":"2026-03-27 16:06:35"}
+[16:06:35] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:06:35] 上报成功: 56132044000075
+[16:06:35] 断开 WiFi "JH-1911_5G"...
+[16:06:36] --- 设备 56132044000075 处理完毕 ---
+[16:06:36] --- 处理设备: 56132044000074 (0) ---
+[16:06:36] 未找到 WiFi "0"，重试扫描 (1/3)...
+[16:06:43] 未找到 WiFi "0"，重试扫描 (2/3)...
+[16:06:50] 未找到 WiFi "0"，重试扫描 (3/3)...
+[16:06:57] WiFi "0" 未发现，标记为失败
+[16:06:57] 上报结果: 56132044000074, 流量=0MB, 状态=失败
+[16:06:57] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:06:57] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000074","wifiName":"0","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:06:57","speedEndTime":"2026-03-27 16:06:57"}
+[16:06:57] 上报失败: request to http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord failed, reason: getaddrinfo ENOTFOUND test.juhuoiot.com
+[16:06:57] 尝试连接备用 WiFi "JHKJ_5G" 进行上报...
+[16:07:00] [备用] 已确认当前 WiFi 为「JHKJ_5G」
+[16:07:02] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:07:02] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000074","wifiName":"0","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:06:57","speedEndTime":"2026-03-27 16:06:57"}
+[16:07:02] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:07:02] 上报成功: 56132044000074
+[16:07:04] ===== 跑量任务完成 =====
+[16:07:04] [备用] 任务结束，正在连接备用 WiFi「JHKJ_5G」...
+[16:07:07] [备用] 已确认当前 WiFi 为「JHKJ_5G」
+[16:07:07] [备用] 已切回备用 WiFi，可正常使用网络
+[16:07:34] 正在触发 WiFi 扫描，请等待...
+[16:07:39] 扫描完成，发现 15 个 WiFi 网络
+[16:07:52] ===== 开始跑量任务 =====
+[16:07:52] 正在获取设备列表...
+[16:07:52] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[16:07:53] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[16:07:53] 获取到 7 个设备
+[16:07:53] 正在扫描 WiFi 网络...
+[16:07:53] 任务已停止
+[16:09:01] 配置文件: D:\project\wifi-down\config.json
+[16:09:01] 日志目录: D:\project\wifi-down\logs
+[16:09:07] ===== 开始跑量任务 =====
+[16:09:07] 正在获取设备列表...
+[16:09:07] [API] GET findSpeedDevice 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[16:09:07] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"12345678"},{"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"12345678"},{"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"PWD_7"},{"sn":"56132045000001","wifiName":"JHKJ_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000076","wifiName":"JHKJ_2.4G","wifiPassword":"jhkj2026"},{"sn":"56132044000075","wifiName":"JH-1911_5G","wifiPassword":"jhkj2026"},{"sn":"56132044000074","wifiName":"0","wifiPassword":"12345678"}],"msg":"操作成功"}
+[16:09:07] 获取到 7 个设备
+[16:09:07] 正在扫描 WiFi 网络...
+[16:09:12] 扫描到 10 个网络
+[16:09:12] --- 处理设备: 56132044000038 (JH-000020) ---
+[16:09:12] 未找到 WiFi "JH-000020"，重试扫描 (1/3)...
+[16:09:19] 未找到 WiFi "JH-000020"，重试扫描 (2/3)...
+[16:09:27] 未找到 WiFi "JH-000020"，重试扫描 (3/3)...
+[16:09:34] WiFi "JH-000020" 未发现，标记为失败
+[16:09:34] 上报结果: 56132044000038, 流量=0MB, 状态=失败, remark=未扫描到 WiFi「JH-000020」
+[16:09:34] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:09:34] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000038","wifiName":"JH-000020","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:09:34","speedEndTime":"2026-03-27 16:09:34","remark":"未扫描到 WiFi「JH-000020」"}
+[16:09:34] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:09:34] 上报成功: 56132044000038
+[16:09:34] --- 处理设备: 56132044000041 (Jhwifi-000041) ---
+[16:09:34] 未找到 WiFi "Jhwifi-000041"，重试扫描 (1/3)...
+[16:09:41] 未找到 WiFi "Jhwifi-000041"，重试扫描 (2/3)...
+[16:09:48] 未找到 WiFi "Jhwifi-000041"，重试扫描 (3/3)...
+[16:09:55] WiFi "Jhwifi-000041" 未发现，标记为失败
+[16:09:55] 上报结果: 56132044000041, 流量=0MB, 状态=失败, remark=未扫描到 WiFi「Jhwifi-000041」
+[16:09:55] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:09:55] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000041","wifiName":"Jhwifi-000041","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:09:55","speedEndTime":"2026-03-27 16:09:55","remark":"未扫描到 WiFi「Jhwifi-000041」"}
+[16:09:55] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:09:55] 上报成功: 56132044000041
+[16:09:55] --- 处理设备: 56132044000042 (TEST_7) ---
+[16:09:55] 未找到 WiFi "TEST_7"，重试扫描 (1/3)...
+[16:09:59] 任务已停止
+[16:10:02] 未找到 WiFi "TEST_7"，重试扫描 (2/3)...
+[16:10:09] 未找到 WiFi "TEST_7"，重试扫描 (3/3)...
+[16:10:16] WiFi "TEST_7" 未发现，标记为失败
+[16:10:16] 上报结果: 56132044000042, 流量=0MB, 状态=失败, remark=未扫描到 WiFi「TEST_7」
+[16:10:16] [API] POST uploadSpeedRecord 请求 URL: http://test.juhuoiot.com/bms-sim/check/device/speed/record/uploadSpeedRecord
+[16:10:16] [API] POST uploadSpeedRecord 表单参数: {"sn":"56132044000042","wifiName":"TEST_7","wifiPassword":"***","useFlow":0,"status":0,"speedStartTime":"2026-03-27 16:10:16","speedEndTime":"2026-03-27 16:10:16","remark":"未扫描到 WiFi「TEST_7」"}
+[16:10:16] [API] uploadSpeedRecord 响应 HTTP 200 body: {"code":"0","data":null,"msg":"操作成功"}
+[16:10:16] 上报成功: 56132044000042
+[16:10:16] ===== 跑量任务完成 =====
+[16:10:16] [备用] 当前已连接「JHKJ_5G」，无需切换
+[16:12:11] 配置文件: D:\project\wifi-down\config.json
+[16:12:11] 日志目录: D:\project\wifi-down\logs

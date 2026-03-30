@@ -1,0 +1,34 @@
+{
+  "baseUrl": "http://test.juhuoiot.com/",
+  "backupWifiName": "JHKJ_5G",
+  "backupWifiPassword": "jhkj2026",
+  "timerInterval": 0,
+  "timerUnit": "min",
+  "testUrls": [
+    {
+      "name": "迅雷影音",
+      "url": "https://xmp.down.sandai.net/xmp/XMPSetup6.2.6.622xmpdl.exe",
+      "referer": "https://dl.xunlei.com/"
+    },
+    {
+      "name": "MAC迅雷",
+      "url": "https://down.sandai.net/mac/thunder_5.80.5.66632.dmg",
+      "referer": "https://dl.xunlei.com/"
+    },
+    {
+      "name": "微信WIndow版",
+      "url": "https://dldir1v6.qq.com/weixin/Universal/Windows/WeChatWin_4.1.8.exe",
+      "referer": "https://pc.weixin.qq.com/"
+    },
+    {
+      "name": "哔哩哔哩Windows版",
+      "url": "https://dl.hdslb.com/mobile/fixed/bili_win/bili_win-install.exe",
+      "referer": "https://app.bilibili.com/"
+    },
+    {
+      "name": "QQWindow版",
+      "url": "https://dldir1v6.qq.com/qqfile/qq/QQNT/Windows/QQ_9.9.28_260319_x64_01.exe",
+      "referer": "https://im.qq.com/"
+    }
+  ]
+}

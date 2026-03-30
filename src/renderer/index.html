@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiFi 跑流量工具</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top config bar -->
+  <header class="config-bar">
+    <div class="config-row">
+      <div class="config-group" id="apiConfigGroup">
+        <label>API 地址</label>
+        <input type="text" id="baseUrl" placeholder="http://192.168.1.100:8080" spellcheck="false">
+      </div>
+      <div class="config-group">
+        <label>备用 WiFi</label>
+        <input type="text" id="backupWifiName" placeholder="WiFi 名称" spellcheck="false">
+        <input type="text" id="backupWifiPassword" placeholder="密码" spellcheck="false">
+      </div>
+      <div class="config-group">
+        <label>定时</label>
+        <input type="number" id="timerInterval" min="0" value="0" placeholder="0=关闭">
+        <select id="timerUnit">
+          <option value="min">分钟</option>
+          <option value="hour">小时</option>
+        </select>
+        <button id="btnToggleTimer" class="btn btn-sm">启用定时</button>
+      </div>
+    </div>
+    <div class="config-row actions-row">
+      <button id="btnStart" class="btn btn-primary">开始跑量</button>
+      <button id="btnStop" class="btn btn-danger" disabled>停止</button>
+      <button id="btnScan" class="btn btn-secondary">扫描 WiFi</button>
+      <button id="btnFetchDevices" class="btn btn-secondary">获取设备</button>
+      <span id="taskStatus" class="status-badge">就绪</span>
+    </div>
+    <div class="config-row test-url-row" id="testToolsRow">
+      <div class="config-group">
+        <label>测速链接</label>
+        <select id="testUrlSelect">
+          <option value="">-- 选择链接 --</option>
+        </select>
+      </div>
+      <div class="config-group">
+        <label>下载量</label>
+        <input type="number" id="testUrlMB" min="1" value="10" placeholder="MB">
+        <span class="input-suffix">MB</span>
+      </div>
+      <button id="btnTestUrl" class="btn btn-secondary">测试下载</button>
+      <button id="btnTestAllUrls" class="btn btn-sm btn-secondary">测试全部</button>
+      <button id="btnStopTest" class="btn btn-sm btn-danger" style="display:none">停止测试</button>
+      <div class="test-progress" id="testProgress" style="display:none">
+        <div class="test-progress-bar">
+          <div class="test-progress-fill" id="testProgressFill"></div>
+        </div>
+        <span class="test-progress-text" id="testProgressText">0 MB / 0 MB</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="panels">
+    <section class="panel panel-devices">
+      <h2><svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01" stroke-width="3" stroke-linecap="round"/></svg>设备列表 <span id="deviceCount" class="count-badge">0</span></h2>
+      <div class="panel-content" id="deviceList">
+        <div class="empty-hint">点击"获取设备"加载列表</div>
+      </div>
+    </section>
+    <section class="panel panel-wifi">
+      <h2><svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>WiFi 网络 <span id="wifiCount" class="count-badge">0</span></h2>
+      <div class="panel-content" id="wifiList">
+        <div class="empty-hint">点击"扫描 WiFi"加载列表</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Log area -->
+  <footer class="log-area">
+    <div class="log-header">
+      <h3>运行日志</h3>
+      <button id="btnClearLog" class="btn btn-sm">清空</button>
+    </div>
+    <div class="log-content" id="logContent"></div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

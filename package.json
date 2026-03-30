@@ -1,0 +1,60 @@
+{
+  "name": "wifi-down",
+  "version": "1.0.0",
+  "description": "WiFi 跑流量测速工具",
+  "main": "main.js",
+  "scripts": {
+    "start": "chcp 65001>nul && electron .",
+    "dev": "chcp 65001>nul && electron . --dev",
+    "build": "electron-builder --win",
+    "build:dir": "electron-builder --win --dir"
+  },
+  "author": "",
+  "license": "MIT",
+  "build": {
+    "appId": "com.wifi-down.app",
+    "productName": "WiFi跑流量工具",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "WiFi跑流量工具"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "config.json",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "src/wlan-scan.ps1"
+    ],
+    "extraFiles": [
+      "config.json"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.8.1"
+  },
+  "dependencies": {
+    "form-data": "^4.0.1",
+    "iconv-lite": "^0.6.3",
+    "node-fetch": "^2.7.0"
+  }
+}
