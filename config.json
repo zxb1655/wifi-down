@@ -63,6 +63,16 @@
       "name": "WPS",
       "url": "https://official-package.wpscdn.cn/wps/download/WPS_Setup_25865.exe",
       "referer": "https://platform.wps.cn/"
+    },
+    {
+      "name": "腾讯视频WIndow",
+      "url": "https://dldir1.qq.com/qqtv/TencentVideo11.163.8661.0.exe?support_redirect=1",
+      "referer": "https://v.qq.com/"
+    },
+    {
+      "name": "腾讯视频Android",
+      "url": "https://dldir1.qq.com/qqmi/aphone_p2p/aphone_agent_http/TencentVideo_V9.03.50.31522_20563.apk",
+      "referer": "https://v.qq.com/"
     }
   ]
 }

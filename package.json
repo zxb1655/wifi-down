@@ -1,6 +1,6 @@
 {
   "name": "wifi-down",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "WiFi 跑流量测速工具",
   "main": "main.js",
   "scripts": {
