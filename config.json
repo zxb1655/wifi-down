@@ -33,6 +33,36 @@
       "name": "QQWindow版",
       "url": "https://dldir1v6.qq.com/qqfile/qq/QQNT/Windows/QQ_9.9.28_260319_x64_01.exe",
       "referer": "https://im.qq.com/"
+    },
+    {
+      "name": "百度网盘Window版",
+      "url": "https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/channel/BaiduNetdisk_bdfc4_8.1.5.103/semclickid=bd_vid_10039937920819108625_utm_account_SS-bdtg102.exe",
+      "referer": "https://pan.baidu.com/"
+    },
+    {
+      "name": "企业微信Window版",
+      "url": "https://dldir1.qq.com/wework/work_weixin/WeCom_5.0.8.6006.exe",
+      "referer": "https://work.weixin.qq.com/"
+    },
+    {
+      "name": "TIM-Window版",
+      "url": "https://dldir1v6.qq.com/qqfile/qq/TIM3.5.1/TIM3.5.1.22172.exe",
+      "referer": "https://tim.qq.com/"
+    },
+    {
+      "name": "腾讯会议",
+      "url": "https://updatecdn.meeting.qq.com/cos/f7a5f035cc430fa9cd9daea0776ba864/TencentMeeting_0300000000_3.42.3.424_x86_64.publish.officialwebsite.exe",
+      "referer": "https://meeting.tencent.com/"
+    },
+    {
+      "name": "腾讯元宝",
+      "url": "https://cdn-hybrid-prod.hunyuan.tencent.com/Desktop/business/channels/yuanbao_10008_x64.exe",
+      "referer": "https://yuanbao.tencent.com/"
+    },
+    {
+      "name": "WPS",
+      "url": "https://official-package.wpscdn.cn/wps/download/WPS_Setup_25865.exe",
+      "referer": "https://platform.wps.cn/"
     }
   ]
 }

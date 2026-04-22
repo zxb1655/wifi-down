@@ -4218,3 +4218,57 @@ netsh wlan connect name="JH-26862531000740" ssid="JH-26862531000740" interface="
 [13:49:40] 断开 WiFi "JH-26862531000740"...
 [13:49:42] --- 设备 26862531000740 处理完毕 ---
 [13:49:42] ===== 跑量任务已中止（用户停止；本轮已处理 3/303 台，剩余未跑）=====
+[14:33:34] 配置文件: D:\project\wifi-down\config.json
+[14:33:34] 日志目录: D:\project\wifi-down\logs
+[14:33:52] [下载] 当前链接: https://dldir1.qq.com/wework/work_weixin/WeCom_5.0.8.6006.exe
+[14:33:58] [下载] 当前链接: https://dldir1.qq.com/wework/work_weixin/WeCom_5.0.8.6006.exe
+[14:34:07] [下载] 当前链接: https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/channel/BaiduNetdisk_bdfc4_8.1.5.103/semclickid=bd_vid_10039937920819108625_utm_account_SS-bdtg102.exe
+[14:34:07] [下载] 当前链接: https://8b7d8c-1993640123.antpcdn.com:19001/b/pkg-ant.baidu.com/issue/netdisk/yunguanjia/channel/BaiduNetdisk_bdfc4_8.1.5.103/semclickid=bd_vid_10039937920819108625_utm_account_SS-bdtg102.exe
+[14:34:21] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:22] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:23] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:23] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:24] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:25] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:26] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:26] [下载] 当前链接: https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao_pc/2.2.3/1005/Doubao_online_installer.exe
+[14:34:34] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:35] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:36] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:37] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:37] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:38] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:38] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:39] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:40] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:40] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:34:41] [下载] 当前链接: https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/344418764/7.7.0/win32-ia32/douyin-downloader-v7.7.0-win32-ia32-douyin.exe
+[14:40:31] 配置文件: D:\project\wifi-down\config.json
+[14:40:31] 日志目录: D:\project\wifi-down\logs
+[14:40:41] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:42] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:42] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:42] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:43] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:43] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:43] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:44] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:44] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:44] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:45] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:45] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:46] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:46] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:46] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:47] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:47] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:48] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:48] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:49] [下载] 当前链接: https://dtapp-cast.dingtalk.com/202604221439/fc33be9788a45ac65ec9a069ec938e11/dingtalk-desktop/win_downloader/2025031302/dingtalk_downloader.exe
+[14:40:56] [下载] 当前链接: https://official-package.wpscdn.cn/wps/download/WPS_Setup_25865.exe
+[14:41:05] [下载] 当前链接: https://cdn-hybrid-prod.hunyuan.tencent.com/Desktop/business/channels/yuanbao_10008_x64.exe
+[14:41:10] [下载] 当前链接: https://cdn-hybrid-prod.hunyuan.tencent.com/Desktop/business/channels/yuanbao_10008_x64.exe
+[14:41:12] [下载] 当前链接: https://updatecdn.meeting.qq.com/cos/f7a5f035cc430fa9cd9daea0776ba864/TencentMeeting_0300000000_3.42.3.424_x86_64.publish.officialwebsite.exe
+[14:41:25] [下载] 当前链接: https://dldir1v6.qq.com/qqfile/qq/TIM3.5.1/TIM3.5.1.22172.exe
+[14:41:31] [下载] 当前链接: https://dldir1.qq.com/wework/work_weixin/WeCom_5.0.8.6006.exe
+[14:41:33] 测试已停止
