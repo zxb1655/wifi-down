@@ -188,13 +188,25 @@ function comparePendingDevices(a, b, lookup) {
   return String(a.sn || '').localeCompare(String(b.sn || ''));
 }
 
+/**
+ * 累积式扫描状态：lookup 中的 SSID 只增不删；UI 展示仍用最近一次扫描结果。
+ * 设计动机：几百台热点并发时单次 WlanScan 不一定能覆盖所有 SSID，某设备只要
+ * 曾被扫到过，就视为"该设备 WiFi 是开启的"，后续无需再命中本次扫描也允许加入队列。
+ */
 function createScanState(initialNetworks) {
   const state = {
     networks: initialNetworks,
     lookup: buildScanLookup(initialNetworks),
-    replace(nets) {
+    merge(nets) {
       state.networks = nets;
-      state.lookup = buildScanLookup(nets);
+      for (const n of nets) {
+        const key = WifiManager.normalizeSsid(n.ssid);
+        if (!key) continue;
+        const prev = state.lookup.get(key);
+        const pct = parseSignalPercentFromString(n.signal);
+        const prevPct = prev ? parseSignalPercentFromString(prev.signal) : -1;
+        if (!prev || pct >= prevPct) state.lookup.set(key, n);
+      }
     },
   };
   return state;
@@ -526,6 +538,114 @@ async function processOneDevice(device, scanState, config) {
   log(`--- 设备 ${sn} 处理完毕 ---`);
 }
 
+/**
+ * 盲连兜底：不依赖扫描结果，直接尝试 netsh wlan connect。
+ * 用于批量任务主循环结束后，仍从未被扫描命中过的设备（可能是热点 beacon 一直被干扰）。
+ * 连接成功则照常跑量上报；连接失败则以「未扫描到...盲连兜底失败」的 remark 上报。
+ */
+async function processOneDeviceBlind(device, config) {
+  const { testUrls, wifiReadyDelaySec } = config;
+  const { sn, wifiName, wifiPassword } = device;
+
+  if (!TrafficGenerator.normalizeTestUrls(testUrls).length) {
+    const remark = '未配置测速链接（config.json 中 testUrls 为空或无效）';
+    log(`[兜底] ${remark}，无法跑量`);
+    device._status = 'failed';
+    device._failRemark = remark;
+    sendDeviceUpdate(device);
+    await reportResult(device, 0, false, config, undefined, undefined, remark);
+    return;
+  }
+
+  log(`[兜底] --- 处理设备: ${sn} (${wifiName}) ---`);
+  device._status = 'processing';
+  device._failRemark = '';
+  sendDeviceUpdate(device);
+
+  log(`[兜底] 未扫描到 WiFi "${wifiName}"，尝试直接连接...`);
+  try {
+    await wifiManager.disconnect();
+    await new Promise((r) => setTimeout(r, 1000));
+    await wifiManager.connect(wifiName, wifiPassword, { networkInfo: null });
+    await ensureWifiConnectedTo(wifiName, '[兜底]');
+    const readySec = Math.max(
+      0,
+      Math.min(86400, Math.floor(Number(wifiReadyDelaySec) || 0)),
+    );
+    if (readySec > 0) {
+      log(`[兜底] 已连接 WiFi，等待 ${readySec} 秒后再开始跑流量（联网就绪）...`);
+      await new Promise((r) => setTimeout(r, readySec * 1000));
+    }
+  } catch (e) {
+    const remark = `未扫描到 WiFi「${wifiName}」，盲连兜底失败: ${e.message}`;
+    log(`[兜底] ${remark}`);
+    device._status = 'failed';
+    device._failRemark = remark;
+    sendDeviceUpdate(device);
+    await reportResult(device, 0, false, config, undefined, undefined, remark);
+    return;
+  }
+
+  const speedStartTime = formatTime(new Date());
+  const targetMB = randomTargetMB(config);
+  log(`[兜底] 开始跑流量，目标约 ${targetMB} MB...`);
+  trafficGenerator = new TrafficGenerator(testUrls);
+  let downloadedBytes = 0;
+  let lastProgressUpdate = 0;
+  let trafficFailRemark = '';
+  try {
+    downloadedBytes = await trafficGenerator.generate({
+      targetMB,
+      onDownloadUrl: (u) => log(`[兜底][下载] 当前链接: ${u}`),
+      onProgress: (downloaded, target) => {
+        device._flow = downloaded;
+        const now = Date.now();
+        if (now - lastProgressUpdate > 500) {
+          lastProgressUpdate = now;
+          sendProgress({ sn, downloaded, target });
+          sendDeviceUpdate(device);
+        }
+      },
+    });
+    log(`[兜底] 跑量完成: ${formatBytes(downloadedBytes)}`);
+    if (downloadedBytes > 0) {
+      device._status = 'success';
+      device._failRemark = '';
+    } else {
+      trafficFailRemark = running ? '未下载到有效流量' : '任务已停止';
+      device._status = 'failed';
+      device._failRemark = trafficFailRemark;
+      log(`[兜底] 跑量失败: ${trafficFailRemark}`);
+    }
+  } catch (e) {
+    trafficFailRemark = e.message || '跑量异常';
+    log(`[兜底] 跑量异常: ${trafficFailRemark}`);
+    device._status = 'failed';
+    device._failRemark = trafficFailRemark;
+  }
+  device._flow = downloadedBytes;
+  sendDeviceUpdate(device);
+
+  const speedEndTime = formatTime(new Date());
+  const success = device._status === 'success';
+
+  await reportResult(
+    device,
+    downloadedBytes,
+    success,
+    config,
+    speedStartTime,
+    speedEndTime,
+    success ? '' : trafficFailRemark,
+  );
+
+  log(`[兜底] 断开 WiFi "${wifiName}"...`);
+  await wifiManager.disconnect();
+  await new Promise((r) => setTimeout(r, 1000));
+
+  log(`[兜底] --- 设备 ${sn} 处理完毕 ---`);
+}
+
 ipcMain.handle('start-single', async (_e, config, device) => {
   if (running) {
     log('任务已在执行中');
@@ -643,7 +763,7 @@ ipcMain.handle('start-task', async (_e, config) => {
         wifiRefreshInFlight = true;
         try {
           const nets = await wifiManager.scan(true);
-          scanState.replace(nets);
+          scanState.merge(nets);
           applyScanFlagsToDevices(devices, scanState.lookup);
           sendWifiList(nets);
           const ssidList = formatScannedSsidList(nets);
@@ -661,13 +781,54 @@ ipcMain.handle('start-task', async (_e, config) => {
 
     let processedCount = 0;
     try {
+      // 第一阶段：只处理"曾扫到过"的设备（累积 lookup 命中的）
+      // 剩下从未扫到的留给下面的盲连兜底阶段，避免走 processOneDevice 入口直接判失败
       while (running) {
         const pending = devices.filter((d) => d._status === 'pending');
         if (pending.length === 0) break;
-        pending.sort((a, b) => comparePendingDevices(a, b, scanState.lookup));
-        const device = pending[0];
-        await processOneDevice(device, scanState, config);
+        const visible = pending.filter((d) =>
+          scanState.lookup.has(WifiManager.normalizeSsid(d.wifiName)),
+        );
+        if (visible.length === 0) break;
+        visible.sort((a, b) => comparePendingDevices(a, b, scanState.lookup));
+        await processOneDevice(visible[0], scanState, config);
         processedCount += 1;
+      }
+
+      // 第二阶段：盲连兜底——对整个任务期间从未被扫到过的 SSID，直接尝试连接
+      if (running) {
+        const invisible = devices.filter((d) => d._status === 'pending');
+        if (invisible.length > 0) {
+          log(`===== 进入盲连兜底阶段：剩余 ${invisible.length} 台从未扫到的设备 =====`);
+          try {
+            const finalNets = await wifiManager.scan(true);
+            scanState.merge(finalNets);
+            applyScanFlagsToDevices(devices, scanState.lookup);
+            sendWifiList(finalNets);
+            const ssidList = formatScannedSsidList(finalNets);
+            log(
+              `[兜底] 最终扫描：${finalNets.length} 个网络` +
+                (ssidList ? `\n  SSID 列表: ${ssidList}` : ''),
+            );
+          } catch (e) {
+            log(`[兜底] 最终扫描失败: ${e.message}`);
+          }
+
+          invisible.sort((a, b) =>
+            String(a.sn || '').localeCompare(String(b.sn || '')),
+          );
+          for (const dev of invisible) {
+            if (!running) break;
+            if (dev._status !== 'pending') continue;
+            const key = WifiManager.normalizeSsid(dev.wifiName);
+            if (key && scanState.lookup.has(key)) {
+              await processOneDevice(dev, scanState, config);
+            } else {
+              await processOneDeviceBlind(dev, config);
+            }
+            processedCount += 1;
+          }
+        }
       }
     } finally {
       if (wifiRefreshTimer) clearInterval(wifiRefreshTimer);

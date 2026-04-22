@@ -42,7 +42,9 @@ function requestOptionsForUrl(url, referer, overrides = {}) {
   return { ...REQUEST_OPTIONS, ...overrides, headers };
 }
 
-const STALL_TIMEOUT = 15000;
+// 提至 30s：主进程在几百个 AP 场景下偶尔会被 wifiManager.scan 的 execSync 阻塞十几秒，
+// 若 stall 阈值过小，会把仅仅是"事件循环被扫描调用短暂卡住"误判成下载停滞。
+const STALL_TIMEOUT = 30000;
 const DOWNLOAD_TIMEOUT = 60000;
 // 连续 N 毫秒没下载到任何字节，判定当前 WiFi 无可用网络，放弃本设备
 const NO_NETWORK_TIMEOUT = 2 * 60 * 1000;
