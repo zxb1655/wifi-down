@@ -135,6 +135,21 @@ function describeScannedNetwork(net) {
   return parts.join('，');
 }
 
+/** 将扫描到的 SSID 列表格式化为日志用字符串（按信号强度降序） */
+function formatScannedSsidList(networks) {
+  if (!Array.isArray(networks) || networks.length === 0) return '';
+  const sorted = [...networks].sort(
+    (a, b) => parseSignalPercentFromString(b.signal) - parseSignalPercentFromString(a.signal)
+  );
+  return sorted
+    .map((n) => {
+      const ssid = n.ssid ? n.ssid : '(隐藏)';
+      const pct = parseSignalPercentFromString(n.signal);
+      return pct >= 0 ? `${ssid}(${pct}%)` : ssid;
+    })
+    .join('、');
+}
+
 /** 每个 SSID（规范化）保留信号最强的一条扫描记录 */
 function buildScanLookup(networks) {
   const map = new Map();
@@ -270,7 +285,11 @@ ipcMain.handle('scan-wifi', async () => {
     log('正在触发 WiFi 扫描，请等待...');
     const networks = await wifiManager.scan(true);
     sendWifiList(networks);
-    log(`扫描完成，发现 ${networks.length} 个 WiFi 网络`);
+    const ssidList = formatScannedSsidList(networks);
+    log(
+      `扫描完成，发现 ${networks.length} 个 WiFi 网络` +
+        (ssidList ? `\n  SSID 列表: ${ssidList}` : '')
+    );
     return networks;
   } catch (e) {
     log(`扫描 WiFi 失败: ${e.message}`);
@@ -524,7 +543,13 @@ ipcMain.handle('start-single', async (_e, config, device) => {
     log('正在扫描 WiFi 网络...');
     let networks = await wifiManager.scan(true);
     sendWifiList(networks);
-    log(`扫描到 ${networks.length} 个网络`);
+    {
+      const ssidList = formatScannedSsidList(networks);
+      log(
+        `扫描到 ${networks.length} 个网络` +
+          (ssidList ? `\n  SSID 列表: ${ssidList}` : '')
+      );
+    }
 
     const scanState = createScanState(networks);
     applyScanFlagsToDevices([device], scanState.lookup);
@@ -595,7 +620,13 @@ ipcMain.handle('start-task', async (_e, config) => {
     }
 
     sendWifiList(networks);
-    log(`扫描到 ${networks.length} 个网络`);
+    {
+      const ssidList = formatScannedSsidList(networks);
+      log(
+        `扫描到 ${networks.length} 个网络` +
+          (ssidList ? `\n  SSID 列表: ${ssidList}` : '')
+      );
+    }
 
     const refreshSec = resolveWifiListRefreshSec(config);
     if (refreshSec > 0) {
@@ -615,7 +646,11 @@ ipcMain.handle('start-task', async (_e, config) => {
           scanState.replace(nets);
           applyScanFlagsToDevices(devices, scanState.lookup);
           sendWifiList(nets);
-          log(`[WiFi] 定时刷新：${nets.length} 个网络`);
+          const ssidList = formatScannedSsidList(nets);
+          log(
+            `[WiFi] 定时刷新：${nets.length} 个网络` +
+              (ssidList ? `\n  SSID 列表: ${ssidList}` : '')
+          );
         } catch (e) {
           log(`[WiFi] 定时刷新失败: ${e.message}`);
         } finally {
