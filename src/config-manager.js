@@ -9,8 +9,17 @@ const DEFAULTS = {
   baseUrl: '',
   backupWifiName: '',
   backupWifiPassword: '',
+  /** 定时间隔，单位：小时（仅小时） */
   timerInterval: 0,
-  timerUnit: 'min',
+  /** 已废弃：保留用于读取旧配置时换算为小时 */
+  timerUnit: 'hour',
+  /** 连接上目标 WiFi 并校验通过后，等待多少秒再开始跑流量（部分机器需等 DHCP/路由就绪） */
+  wifiReadyDelaySec: 0,
+  /** 批量跑量时自动重新扫描 WiFi 的间隔（秒）；0 表示仅在任务开始时扫一次 */
+  wifiListRefreshSec: 45,
+  /** 每台设备跑流量时，随机目标区间（MB，含端点整数） */
+  trafficMinMB: 100,
+  trafficMaxMB: 200,
   testUrls: [],
 };
 
@@ -54,12 +63,33 @@ class ConfigManager {
   }
 
   save(config) {
+    const rawReady = Number(config.wifiReadyDelaySec);
+    const wifiReady = Number.isFinite(rawReady) ? Math.max(0, Math.min(86400, Math.floor(rawReady))) : 0;
+    const rawListRefresh = Number(config.wifiListRefreshSec);
+    const wifiListRefreshSec = Number.isFinite(rawListRefresh)
+      ? Math.max(0, Math.min(3600, Math.floor(rawListRefresh)))
+      : DEFAULTS.wifiListRefreshSec;
+    let tMin = Math.floor(Number(config.trafficMinMB));
+    let tMax = Math.floor(Number(config.trafficMaxMB));
+    if (!Number.isFinite(tMin)) tMin = DEFAULTS.trafficMinMB;
+    if (!Number.isFinite(tMax)) tMax = DEFAULTS.trafficMaxMB;
+    tMin = Math.max(1, Math.min(50000, tMin));
+    tMax = Math.max(1, Math.min(50000, tMax));
+    if (tMin > tMax) {
+      const x = tMin;
+      tMin = tMax;
+      tMax = x;
+    }
     const data = {
       baseUrl: config.baseUrl ?? DEFAULTS.baseUrl,
       backupWifiName: config.backupWifiName ?? DEFAULTS.backupWifiName,
       backupWifiPassword: config.backupWifiPassword ?? DEFAULTS.backupWifiPassword,
       timerInterval: config.timerInterval ?? DEFAULTS.timerInterval,
-      timerUnit: config.timerUnit ?? DEFAULTS.timerUnit,
+      timerUnit: 'hour',
+      wifiReadyDelaySec: wifiReady,
+      wifiListRefreshSec,
+      trafficMinMB: tMin,
+      trafficMaxMB: tMax,
       testUrls: Array.isArray(config.testUrls) ? config.testUrls : DEFAULTS.testUrls,
     };
     fs.writeFileSync(this._writablePath, JSON.stringify(data, null, 2), 'utf-8');

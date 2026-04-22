@@ -20,13 +20,27 @@
         <input type="text" id="backupWifiPassword" placeholder="密码" spellcheck="false">
       </div>
       <div class="config-group">
+        <label>连 WiFi 后等待</label>
+        <input type="number" id="wifiReadyDelaySec" min="0" max="86400" value="0" placeholder="秒" title="连上并校验 WiFi 后等待多少秒再开始跑流量">
+        <span class="input-suffix">秒</span>
+      </div>
+      <div class="config-group">
+        <label>跑量时刷 WiFi</label>
+        <input type="number" id="wifiListRefreshSec" min="0" max="3600" value="45" placeholder="秒" title="批量跑量过程中每隔多少秒重新扫描 WiFi；0=仅在开始时扫一次">
+        <span class="input-suffix">秒</span>
+      </div>
+      <div class="config-group">
         <label>定时</label>
-        <input type="number" id="timerInterval" min="0" value="0" placeholder="0=关闭">
-        <select id="timerUnit">
-          <option value="min">分钟</option>
-          <option value="hour">小时</option>
-        </select>
+        <input type="number" id="timerInterval" min="0" step="any" value="0" placeholder="0=关闭" title="定时间隔（小时）">
+        <span class="input-suffix">小时</span>
         <button id="btnToggleTimer" class="btn btn-sm">启用定时</button>
+      </div>
+      <div class="config-group" id="trafficRangeGroup">
+        <label>跑量范围</label>
+        <input type="number" id="trafficMinMB" min="1" max="50000" value="100" title="每台随机目标下限 (MB)">
+        <span class="input-suffix">~</span>
+        <input type="number" id="trafficMaxMB" min="1" max="50000" value="200" title="每台随机目标上限 (MB)">
+        <span class="input-suffix">MB</span>
       </div>
     </div>
     <div class="config-row actions-row">

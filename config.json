@@ -1,9 +1,13 @@
 {
-  "baseUrl": "http://test.juhuoiot.com/",
-  "backupWifiName": "JHKJ_5G",
-  "backupWifiPassword": "jhkj2026",
+  "baseUrl": "http://boss.juhuoiot.com/",
+  "backupWifiName": "",
+  "backupWifiPassword": "",
   "timerInterval": 0,
-  "timerUnit": "min",
+  "timerUnit": "hour",
+  "wifiReadyDelaySec": 10,
+  "wifiListRefreshSec": 45,
+  "trafficMinMB": 100,
+  "trafficMaxMB": 200,
   "testUrls": [
     {
       "name": "迅雷影音",

@@ -20,7 +20,8 @@ const elBaseUrl = $('#baseUrl');
 const elBackupName = $('#backupWifiName');
 const elBackupPass = $('#backupWifiPassword');
 const elTimerInterval = $('#timerInterval');
-const elTimerUnit = $('#timerUnit');
+const elWifiReadyDelaySec = $('#wifiReadyDelaySec');
+const elWifiListRefreshSec = $('#wifiListRefreshSec');
 const elBtnTimer = $('#btnToggleTimer');
 const elBtnStart = $('#btnStart');
 const elBtnStop = $('#btnStop');
@@ -43,6 +44,8 @@ const elLogContent = $('#logContent');
 const elBtnClearLog = $('#btnClearLog');
 const elApiConfigGroup = $('#apiConfigGroup');
 const elTestToolsRow = $('#testToolsRow');
+const elTrafficMinMB = $('#trafficMinMB');
+const elTrafficMaxMB = $('#trafficMaxMB');
 
 function formatBytes(bytes) {
   if (bytes < 1024) return bytes + ' B';
@@ -77,6 +80,47 @@ function parseSignalPercent(signal) {
   return m ? parseInt(m[1], 10) : 0;
 }
 
+/** 与主进程 WifiManager.normalizeSsid 一致，用于列表与扫描结果对齐 */
+function normalizeSsidMatch(ssid) {
+  if (ssid == null) return null;
+  let s = String(ssid).trim();
+  if (!s) return null;
+  s = s.replace(/^["']+|["']+$/g, '');
+  s = s.replace(/[\u200B-\u200D\uFEFF]/g, '');
+  return s.normalize('NFKC');
+}
+
+/** 根据当前 WiFi 扫描结果为设备打上「是否在本轮列表中」标记 */
+function syncDeviceScanFlagsFromWifiList() {
+  const best = new Map();
+  for (const w of state.wifiList) {
+    const k = normalizeSsidMatch(w.ssid);
+    if (!k) continue;
+    const pct = parseSignalPercent(w.signal);
+    const prev = best.get(k);
+    if (!prev || pct > prev.pct) best.set(k, { signal: w.signal, pct });
+  }
+  state.devices.forEach((d) => {
+    const k = normalizeSsidMatch(d.wifiName);
+    const hit = k && best.has(k);
+    d._scanVisible = !!hit;
+    d._scanSignal = hit ? best.get(k).signal : '';
+  });
+}
+
+/** 展示顺序：已扫描到的在上，其次信号强度，再按 SN */
+function sortDevicesForDisplay(list) {
+  return [...list].sort((a, b) => {
+    const av = !!a._scanVisible;
+    const bv = !!b._scanVisible;
+    if (av !== bv) return (bv ? 1 : 0) - (av ? 1 : 0);
+    const ap = parseSignalPercent(a._scanSignal || '');
+    const bp = parseSignalPercent(b._scanSignal || '');
+    if (bp !== ap) return bp - ap;
+    return String(a.sn || '').localeCompare(String(b.sn || ''));
+  });
+}
+
 function buildSignalBars(signal) {
   const pct = parseSignalPercent(signal);
   const level = pct >= 70 ? 4 : pct >= 50 ? 3 : pct >= 30 ? 2 : pct > 0 ? 1 : 0;
@@ -94,7 +138,8 @@ function renderDevices() {
     return;
   }
   elDeviceCount.textContent = state.devices.length;
-  elDeviceList.innerHTML = state.devices.map(d => {
+  const sorted = sortDevicesForDisplay(state.devices);
+  elDeviceList.innerHTML = sorted.map(d => {
     const status = d._status || 'pending';
     const queued = !!d._queued;
     const runningSingle = !!d.sn && d.sn === state.singleCurrentSn;
@@ -112,11 +157,15 @@ function renderDevices() {
         : '<span class="placeholder">无</span>';
 
     const canRun = status !== 'success' && status !== 'processing' && !queued && !runningSingle && state.runningMode !== 'bulk';
+    const scanOk = !!d._scanVisible;
+    const scanLabel = scanOk
+      ? `<span class="device-scan-tag in-range">已扫描到${d._scanSignal ? ` ${escapeHtml(parseSignalPercent(d._scanSignal) + '%')}` : ''}</span>`
+      : '<span class="device-scan-tag out-range">未扫描到</span>';
     return `
       <div class="device-item status-${status}" data-sn="${escapeHtml(d.sn || '')}">
         <div class="device-icon ${status}">${getStatusIcon(status)}</div>
         <div class="device-info">
-          <div class="device-sn">${snDisplay}</div>
+          <div class="device-sn-row"><span class="device-sn">${snDisplay}</span>${scanLabel}</div>
           <div class="device-wifi">
             <svg class="device-wifi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
             ${wifiDisplay}
@@ -378,12 +427,20 @@ function getConfig() {
 }
 
 function getFullConfig() {
+  const readySec = parseInt(elWifiReadyDelaySec.value, 10);
+  const listRefresh = parseInt(elWifiListRefreshSec.value, 10);
   return {
     baseUrl: elBaseUrl.value.trim(),
     backupWifiName: elBackupName.value.trim(),
     backupWifiPassword: elBackupPass.value.trim(),
     timerInterval: parseFloat(elTimerInterval.value) || 0,
-    timerUnit: elTimerUnit.value,
+    timerUnit: 'hour',
+    wifiReadyDelaySec: Number.isFinite(readySec) ? Math.max(0, Math.min(86400, readySec)) : 0,
+    wifiListRefreshSec: Number.isFinite(listRefresh)
+      ? Math.max(0, Math.min(3600, listRefresh))
+      : 45,
+    trafficMinMB: parseInt(elTrafficMinMB?.value, 10),
+    trafficMaxMB: parseInt(elTrafficMaxMB?.value, 10),
     testUrls: state.testUrls,
   };
 }
@@ -400,11 +457,34 @@ function applyConfig(cfg) {
   if (cfg.baseUrl) elBaseUrl.value = cfg.baseUrl;
   if (cfg.backupWifiName) elBackupName.value = cfg.backupWifiName;
   if (cfg.backupWifiPassword) elBackupPass.value = cfg.backupWifiPassword;
-  if (cfg.timerInterval) elTimerInterval.value = cfg.timerInterval;
-  if (cfg.timerUnit) elTimerUnit.value = cfg.timerUnit;
+  if (cfg.timerInterval != null && cfg.timerInterval !== '') {
+    let hours = parseFloat(cfg.timerInterval) || 0;
+    if (cfg.timerUnit === 'min') hours = hours / 60;
+    elTimerInterval.value = hours;
+  }
+  if (cfg.wifiReadyDelaySec != null && cfg.wifiReadyDelaySec !== '') {
+    elWifiReadyDelaySec.value = cfg.wifiReadyDelaySec;
+  } else {
+    elWifiReadyDelaySec.value = 0;
+  }
+  if (elWifiListRefreshSec) {
+    if (cfg.wifiListRefreshSec != null && cfg.wifiListRefreshSec !== '') {
+      elWifiListRefreshSec.value = cfg.wifiListRefreshSec;
+    } else {
+      elWifiListRefreshSec.value = 45;
+    }
+  }
   if (cfg.testUrls && Array.isArray(cfg.testUrls)) {
     state.testUrls = cfg.testUrls;
     renderTestUrlSelect();
+  }
+  if (elTrafficMinMB && elTrafficMaxMB) {
+    if (cfg.trafficMinMB != null && cfg.trafficMinMB !== '') {
+      elTrafficMinMB.value = cfg.trafficMinMB;
+    }
+    if (cfg.trafficMaxMB != null && cfg.trafficMaxMB !== '') {
+      elTrafficMaxMB.value = cfg.trafficMaxMB;
+    }
   }
 }
 
@@ -412,7 +492,9 @@ window.api.onLog((msg) => appendLog(msg));
 
 window.api.onWifiList((list) => {
   state.wifiList = list;
+  syncDeviceScanFlagsFromWifiList();
   renderWifiList();
+  renderDevices();
 });
 
 window.api.onDeviceUpdate((device) => {
@@ -456,7 +538,9 @@ elBtnScan.addEventListener('click', async () => {
   try {
     const list = await window.api.scanWifi();
     state.wifiList = list;
+    syncDeviceScanFlagsFromWifiList();
     renderWifiList();
+    renderDevices();
   } catch (e) {
     appendLog('[UI] 扫描失败: ' + e.message);
   }
@@ -473,7 +557,16 @@ elBtnFetch.addEventListener('click', async () => {
   appendLog('[UI] 正在获取设备列表...');
   try {
     const devices = await window.api.fetchDevices(getFullConfig());
-    state.devices = devices.map(d => ({ ...d, _status: 'pending', _flow: 0, _progress: 0, _failRemark: '' }));
+    state.devices = devices.map(d => ({
+      ...d,
+      _status: 'pending',
+      _flow: 0,
+      _progress: 0,
+      _failRemark: '',
+      _scanVisible: false,
+      _scanSignal: '',
+    }));
+    syncDeviceScanFlagsFromWifiList();
     renderDevices();
     renderWifiList();
   } catch (e) {
@@ -599,16 +692,14 @@ elBtnTimer.addEventListener('click', () => {
   } else {
     const val = parseFloat(elTimerInterval.value);
     if (!val || val <= 0) {
-      appendLog('[UI] 请输入有效的定时间隔');
+      appendLog('[UI] 请输入有效的定时间隔（小时）');
       return;
     }
-    const unit = elTimerUnit.value;
-    const ms = unit === 'hour' ? val * 60 * 60 * 1000 : val * 60 * 1000;
-    const unitLabel = unit === 'hour' ? '小时' : '分钟';
+    const ms = val * 60 * 60 * 1000;
 
     state.timerEnabled = true;
     elBtnTimer.textContent = '关闭定时';
-    appendLog(`[UI] 定时任务已启用，每 ${val} ${unitLabel}执行一次`);
+    appendLog(`[UI] 定时任务已启用，每 ${val} 小时执行一次`);
     state.timerId = setInterval(async () => {
       if (state.running) {
         appendLog('[UI] 定时触发: 上一次任务仍在执行，跳过');
@@ -620,10 +711,9 @@ elBtnTimer.addEventListener('click', () => {
   }
 });
 
-[elBaseUrl, elBackupName, elBackupPass, elTimerInterval].forEach(el => {
-  el.addEventListener('input', scheduleSaveConfig);
+[elBaseUrl, elBackupName, elBackupPass, elTimerInterval, elWifiReadyDelaySec, elWifiListRefreshSec, elTrafficMinMB, elTrafficMaxMB].forEach(el => {
+  if (el) el.addEventListener('input', scheduleSaveConfig);
 });
-elTimerUnit.addEventListener('change', scheduleSaveConfig);
 
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'F1') return;

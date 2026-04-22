@@ -26,6 +26,8 @@ let apiClient;
 let configManager;
 let logDir = null;
 let running = false;
+/** 批量跑量时用户是否点击过停止（用于与「正常跑完」区分日志） */
+let batchStopRequested = false;
 let testingAborted = false;
 let testAbortEmitter = null;
 
@@ -89,6 +91,22 @@ function sendProgress(data) {
   }
 }
 
+/** 每台设备在 [min,max] MB 间随机取整，非法配置时回退 100~200 */
+function randomTargetMB(config) {
+  let min = Math.floor(Number(config?.trafficMinMB));
+  let max = Math.floor(Number(config?.trafficMaxMB));
+  if (!Number.isFinite(min)) min = 100;
+  if (!Number.isFinite(max)) max = 200;
+  min = Math.max(1, Math.min(50000, min));
+  max = Math.max(1, Math.min(50000, max));
+  if (min > max) {
+    const x = min;
+    min = max;
+    max = x;
+  }
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
 function formatTime(date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -97,6 +115,82 @@ function formatTime(date) {
   const mi = String(date.getMinutes()).padStart(2, '0');
   const s = String(date.getSeconds()).padStart(2, '0');
   return `${y}-${m}-${d} ${h}:${mi}:${s}`;
+}
+
+function parseSignalPercentFromString(signal) {
+  if (signal == null || signal === '') return -1;
+  const m = String(signal).match(/(\d+)/);
+  return m ? parseInt(m[1], 10) : -1;
+}
+
+function describeScannedNetwork(net) {
+  if (!net) return '';
+  const parts = [];
+  if (net.signal) parts.push(`信号: ${net.signal}`);
+  if (net.auth) parts.push(`认证: ${net.auth}`);
+  if (net.encryption) parts.push(`加密: ${net.encryption}`);
+  if (net.band) parts.push(`频段: ${net.band}`);
+  if (net.channel) parts.push(`信道: ${net.channel}`);
+  if (net.radio) parts.push(`无线电: ${net.radio}`);
+  return parts.join('，');
+}
+
+/** 每个 SSID（规范化）保留信号最强的一条扫描记录 */
+function buildScanLookup(networks) {
+  const map = new Map();
+  for (const n of networks) {
+    const key = WifiManager.normalizeSsid(n.ssid);
+    if (!key) continue;
+    const pct = parseSignalPercentFromString(n.signal);
+    const prev = map.get(key);
+    if (!prev || pct > parseSignalPercentFromString(prev.signal)) {
+      map.set(key, n);
+    }
+  }
+  return map;
+}
+
+function applyScanFlagsToDevices(devices, lookup) {
+  for (const d of devices) {
+    const key = WifiManager.normalizeSsid(d.wifiName);
+    const hit = key && lookup.has(key);
+    const net = hit ? lookup.get(key) : null;
+    d._scanVisible = !!hit;
+    d._scanSignal = hit ? (net.signal || '') : '';
+  }
+}
+
+/** 待处理设备排序：当前列表中可见的优先，其次按信号强度 */
+function comparePendingDevices(a, b, lookup) {
+  const ka = WifiManager.normalizeSsid(a.wifiName);
+  const kb = WifiManager.normalizeSsid(b.wifiName);
+  const aIn = !!(ka && lookup.has(ka));
+  const bIn = !!(kb && lookup.has(kb));
+  if (aIn !== bIn) return (bIn ? 1 : 0) - (aIn ? 1 : 0);
+  const sa = aIn ? parseSignalPercentFromString(lookup.get(ka).signal) : -1;
+  const sb = bIn ? parseSignalPercentFromString(lookup.get(kb).signal) : -1;
+  if (sb !== sa) return sb - sa;
+  return String(a.sn || '').localeCompare(String(b.sn || ''));
+}
+
+function createScanState(initialNetworks) {
+  const state = {
+    networks: initialNetworks,
+    lookup: buildScanLookup(initialNetworks),
+    replace(nets) {
+      state.networks = nets;
+      state.lookup = buildScanLookup(nets);
+    },
+  };
+  return state;
+}
+
+function resolveWifiListRefreshSec(config) {
+  const raw = config && config.wifiListRefreshSec;
+  if (Number.isFinite(Number(raw))) {
+    return Math.max(0, Math.min(3600, Math.floor(Number(raw))));
+  }
+  return 45;
 }
 
 function formatBytes(bytes) {
@@ -197,6 +291,7 @@ ipcMain.handle('fetch-devices', async (_e, config) => {
 
 ipcMain.handle('stop-task', async () => {
   running = false;
+  batchStopRequested = true;
   if (trafficGenerator) trafficGenerator.abort();
   log('任务已停止');
 });
@@ -296,8 +391,8 @@ ipcMain.handle('test-download', async (_e, payload, targetMB) => {
   }
 });
 
-async function processOneDevice(device, networks, config) {
-  const { baseUrl, backupWifiName, backupWifiPassword, testUrls } = config;
+async function processOneDevice(device, scanState, config) {
+  const { baseUrl, backupWifiName, backupWifiPassword, testUrls, wifiReadyDelaySec } = config;
   const { sn, wifiName, wifiPassword } = device;
 
   if (!TrafficGenerator.normalizeTestUrls(testUrls).length) {
@@ -315,23 +410,10 @@ async function processOneDevice(device, networks, config) {
   device._failRemark = '';
   sendDeviceUpdate(device);
 
-  let matched = false;
-  const MAX_RETRIES = 3;
-  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    const found = networks.find(n => n.ssid === wifiName);
-    if (found) {
-      matched = true;
-      log(`WiFi "${wifiName}" 已匹配，信号: ${found.signal || '未知'}`);
-      break;
-    }
-    log(`未找到 WiFi "${wifiName}"，重试扫描 (${attempt + 1}/${MAX_RETRIES})...`);
-    await new Promise(r => setTimeout(r, 2000));
-    networks = await wifiManager.scan(true);
-    sendWifiList(networks);
-  }
-
-  if (!matched) {
-    const remark = `未扫描到 WiFi「${wifiName}」`;
+  const key = WifiManager.normalizeSsid(wifiName);
+  const found = key && scanState.lookup.has(key) ? scanState.lookup.get(key) : null;
+  if (!found) {
+    const remark = `未扫描到 WiFi「${wifiName}」（当前列表无此 SSID；若热点刚开启可等待下次 WiFi 定时刷新后再跑）`;
     log(`WiFi "${wifiName}" 未发现，标记为失败`);
     device._status = 'failed';
     device._failRemark = remark;
@@ -339,13 +421,22 @@ async function processOneDevice(device, networks, config) {
     await reportResult(device, 0, false, config, undefined, undefined, remark);
     return;
   }
+  log(`WiFi "${wifiName}" 已匹配（当前列表），${describeScannedNetwork(found) || '扫描信息不足'}`);
 
   log(`正在连接 WiFi "${wifiName}"...`);
   try {
     await wifiManager.disconnect();
     await new Promise(r => setTimeout(r, 1000));
-    await wifiManager.connect(wifiName, wifiPassword);
+    await wifiManager.connect(wifiName, wifiPassword, { networkInfo: found });
     await ensureWifiConnectedTo(wifiName);
+    const readySec = Math.max(
+      0,
+      Math.min(86400, Math.floor(Number(wifiReadyDelaySec) || 0)),
+    );
+    if (readySec > 0) {
+      log(`已连接 WiFi，等待 ${readySec} 秒后再开始跑流量（联网就绪）...`);
+      await new Promise((r) => setTimeout(r, readySec * 1000));
+    }
   } catch (e) {
     const remark = `连接失败: ${e.message}`;
     log(remark);
@@ -357,7 +448,7 @@ async function processOneDevice(device, networks, config) {
   }
 
   const speedStartTime = formatTime(new Date());
-  const targetMB = (100 + Math.random() * 100).toFixed(0);
+  const targetMB = randomTargetMB(config);
   log(`开始跑流量，目标约 ${targetMB} MB...`);
   trafficGenerator = new TrafficGenerator(testUrls);
   let downloadedBytes = 0;
@@ -365,6 +456,7 @@ async function processOneDevice(device, networks, config) {
   let trafficFailRemark = '';
   try {
     downloadedBytes = await trafficGenerator.generate({
+      targetMB,
       onDownloadUrl: (u) => log(`[下载] 当前链接: ${u}`),
       onProgress: (downloaded, target) => {
         device._flow = downloaded;
@@ -377,8 +469,15 @@ async function processOneDevice(device, networks, config) {
       },
     });
     log(`跑量完成: ${formatBytes(downloadedBytes)}`);
-    device._status = 'success';
-    device._failRemark = '';
+    if (downloadedBytes > 0) {
+      device._status = 'success';
+      device._failRemark = '';
+    } else {
+      trafficFailRemark = running ? '未下载到有效流量' : '任务已停止';
+      device._status = 'failed';
+      device._failRemark = trafficFailRemark;
+      log(`跑量失败: ${trafficFailRemark}`);
+    }
   } catch (e) {
     trafficFailRemark = e.message || '跑量异常';
     log(`跑量异常: ${trafficFailRemark}`);
@@ -413,6 +512,7 @@ ipcMain.handle('start-single', async (_e, config, device) => {
     log('任务已在执行中');
     return;
   }
+  batchStopRequested = false;
   running = true;
 
   const { baseUrl, backupWifiName, backupWifiPassword } = config;
@@ -426,7 +526,10 @@ ipcMain.handle('start-single', async (_e, config, device) => {
     sendWifiList(networks);
     log(`扫描到 ${networks.length} 个网络`);
 
-    await processOneDevice(device, networks, config);
+    const scanState = createScanState(networks);
+    applyScanFlagsToDevices([device], scanState.lookup);
+    sendDeviceUpdate(device);
+    await processOneDevice(device, scanState, config);
 
     log(`===== 单设备跑量完成 =====`);
   } catch (e) {
@@ -445,6 +548,7 @@ ipcMain.handle('start-task', async (_e, config) => {
     log('任务已在执行中');
     return;
   }
+  batchStopRequested = false;
   running = true;
 
   const { baseUrl, backupWifiName, backupWifiPassword } = config;
@@ -479,23 +583,69 @@ ipcMain.handle('start-task', async (_e, config) => {
       return;
     }
 
+    log('正在扫描 WiFi 网络...');
+    let networks = await wifiManager.scan(true);
+    const scanState = createScanState(networks);
+    applyScanFlagsToDevices(devices, scanState.lookup);
+
     for (const dev of devices) {
       dev._status = 'pending';
       dev._flow = 0;
       sendDeviceUpdate(dev);
     }
 
-    log('正在扫描 WiFi 网络...');
-    let networks = await wifiManager.scan(true);
     sendWifiList(networks);
     log(`扫描到 ${networks.length} 个网络`);
 
-    for (const device of devices) {
-      if (!running) break;
-      await processOneDevice(device, networks, config);
+    const refreshSec = resolveWifiListRefreshSec(config);
+    if (refreshSec > 0) {
+      log(`批量任务：优先处理当前扫描到的热点；WiFi 列表每 ${refreshSec} 秒自动刷新一次`);
+    } else {
+      log('批量任务：优先处理当前扫描到的热点；已关闭运行中 WiFi 定时刷新（配置 wifiListRefreshSec=0）');
     }
 
-    log('===== 跑量任务完成 =====');
+    let wifiRefreshTimer = null;
+    let wifiRefreshInFlight = false;
+    if (refreshSec > 0) {
+      wifiRefreshTimer = setInterval(async () => {
+        if (!running || wifiRefreshInFlight) return;
+        wifiRefreshInFlight = true;
+        try {
+          const nets = await wifiManager.scan(true);
+          scanState.replace(nets);
+          applyScanFlagsToDevices(devices, scanState.lookup);
+          sendWifiList(nets);
+          log(`[WiFi] 定时刷新：${nets.length} 个网络`);
+        } catch (e) {
+          log(`[WiFi] 定时刷新失败: ${e.message}`);
+        } finally {
+          wifiRefreshInFlight = false;
+        }
+      }, refreshSec * 1000);
+    }
+
+    let processedCount = 0;
+    try {
+      while (running) {
+        const pending = devices.filter((d) => d._status === 'pending');
+        if (pending.length === 0) break;
+        pending.sort((a, b) => comparePendingDevices(a, b, scanState.lookup));
+        const device = pending[0];
+        await processOneDevice(device, scanState, config);
+        processedCount += 1;
+      }
+    } finally {
+      if (wifiRefreshTimer) clearInterval(wifiRefreshTimer);
+    }
+
+    const total = devices.length;
+    if (batchStopRequested && processedCount < total) {
+      log(
+        `===== 跑量任务已中止（用户停止；本轮已处理 ${processedCount}/${total} 台，剩余未跑）=====`,
+      );
+    } else {
+      log(`===== 跑量任务完成（本轮已处理 ${processedCount}/${total} 台）=====`);
+    }
   } catch (e) {
     log(`任务异常: ${e.message}`);
   } finally {
@@ -563,7 +713,7 @@ app.whenReady().then(() => {
   configManager = new ConfigManager();
   logDir = path.join(configManager.getBaseDir(), 'logs');
   try { fs.mkdirSync(logDir, { recursive: true }); } catch (_) {}
-  wifiManager = new WifiManager();
+  wifiManager = new WifiManager({ debugLog: (msg) => log(msg) });
   apiClient = new ApiClient();
   apiClient.setLogger((msg) => log(msg));
   log(`配置文件: ${configManager.getPath()}`);

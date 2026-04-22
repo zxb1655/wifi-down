@@ -44,6 +44,8 @@ function requestOptionsForUrl(url, referer, overrides = {}) {
 
 const STALL_TIMEOUT = 15000;
 const DOWNLOAD_TIMEOUT = 60000;
+// 连续 N 毫秒没下载到任何字节，判定当前 WiFi 无可用网络，放弃本设备
+const NO_NETWORK_TIMEOUT = 2 * 60 * 1000;
 
 class TrafficGenerator {
   constructor(testUrls = null) {
@@ -63,7 +65,11 @@ class TrafficGenerator {
 
   async generate(opts = {}) {
     this._aborted = false;
-    const targetMB = opts.targetMB || (100 + Math.random() * 50);
+    let targetMB = opts.targetMB;
+    if (targetMB == null || !Number.isFinite(Number(targetMB))) {
+      targetMB = 100 + Math.random() * 100;
+    }
+    targetMB = Number(targetMB);
     const targetBytes = Math.floor(targetMB * 1024 * 1024);
     const onProgress = opts.onProgress || (() => {});
 
@@ -75,7 +81,15 @@ class TrafficGenerator {
       throw new Error('未配置测速链接（config.json 中 testUrls 为空或无效）');
     }
 
+    const noNetworkTimeoutMs = Number.isFinite(Number(opts.noNetworkTimeoutMs))
+      ? Number(opts.noNetworkTimeoutMs)
+      : NO_NETWORK_TIMEOUT;
+    const startTime = Date.now();
+
     while (totalDownloaded < targetBytes && !this._aborted) {
+      if (totalDownloaded === 0 && Date.now() - startTime >= noNetworkTimeoutMs) {
+        throw new Error(`网络不可用（${Math.round(noNetworkTimeoutMs / 1000)} 秒内未下载到任何数据）`);
+      }
       const entry = this._entries[Math.floor(Math.random() * this._entries.length)];
       try {
         await this._downloadOne(entry, targetBytes - totalDownloaded, (chunkBytes) => {
@@ -84,6 +98,9 @@ class TrafficGenerator {
         }, onDownloadUrl);
       } catch (e) {
         if (this._aborted) break;
+        if (totalDownloaded === 0 && Date.now() - startTime >= noNetworkTimeoutMs) {
+          throw new Error(`网络不可用（${Math.round(noNetworkTimeoutMs / 1000)} 秒内未下载到任何数据）`);
+        }
         await new Promise(r => setTimeout(r, 1000));
       }
     }
