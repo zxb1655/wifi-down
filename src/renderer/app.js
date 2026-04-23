@@ -43,6 +43,7 @@ const elApiConfigGroup = $('#apiConfigGroup');
 const elTestToolsRow = $('#testToolsRow');
 const elTrafficMinMB = $('#trafficMinMB');
 const elTrafficMaxMB = $('#trafficMaxMB');
+const elEnableBlindFallback = $('#enableBlindFallback');
 
 function formatBytes(bytes) {
   if (bytes < 1024) return bytes + ' B';
@@ -438,6 +439,7 @@ function getFullConfig() {
       : 45,
     trafficMinMB: parseInt(elTrafficMinMB?.value, 10),
     trafficMaxMB: parseInt(elTrafficMaxMB?.value, 10),
+    enableBlindFallback: !!(elEnableBlindFallback && elEnableBlindFallback.checked),
     testUrls: state.testUrls,
   };
 }
@@ -478,6 +480,9 @@ function applyConfig(cfg) {
     if (cfg.trafficMaxMB != null && cfg.trafficMaxMB !== '') {
       elTrafficMaxMB.value = cfg.trafficMaxMB;
     }
+  }
+  if (elEnableBlindFallback) {
+    elEnableBlindFallback.checked = !!cfg.enableBlindFallback;
   }
 }
 
@@ -678,6 +683,10 @@ elBtnStopTest.addEventListener('click', async () => {
 [elBaseUrl, elComputerKey, elBackupName, elBackupPass, elWifiReadyDelaySec, elWifiListRefreshSec, elTrafficMinMB, elTrafficMaxMB].forEach(el => {
   if (el) el.addEventListener('input', scheduleSaveConfig);
 });
+
+if (elEnableBlindFallback) {
+  elEnableBlindFallback.addEventListener('change', scheduleSaveConfig);
+}
 
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'F1') return;

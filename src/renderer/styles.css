@@ -537,6 +537,98 @@ body {
   margin-left: -4px;
 }
 
+/* ---- Checkbox in config bar ---- */
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+/* ---- Info tooltip (? icon) ---- */
+.info-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--info);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: help;
+  outline: none;
+  transition: background 0.2s;
+}
+
+.info-tip:hover,
+.info-tip:focus {
+  background: var(--primary);
+}
+
+.info-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(45, 52, 54, 0.95);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: pre-line;
+  max-width: 320px;
+  width: max-content;
+  text-align: left;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  z-index: 1000;
+}
+
+.info-tip::before {
+  content: '';
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: rgba(45, 52, 54, 0.95);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+  z-index: 1000;
+}
+
+.info-tip:hover::after,
+.info-tip:focus::after,
+.info-tip:hover::before,
+.info-tip:focus::before {
+  opacity: 1;
+  visibility: visible;
+}
+
 .test-progress {
   display: flex;
   align-items: center;

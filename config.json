@@ -7,6 +7,7 @@
   "wifiListRefreshSec": 45,
   "trafficMinMB": 100,
   "trafficMaxMB": 200,
+  "enableBlindFallback": false,
   "testUrls": [
     {
       "name": "迅雷影音",

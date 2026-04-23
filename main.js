@@ -796,37 +796,56 @@ ipcMain.handle('start-task', async (_e, config) => {
       }
 
       // 第二阶段：盲连兜底——对整个任务期间从未被扫到过的 SSID，直接尝试连接
+      // 仅在 config.enableBlindFallback 开启时执行；否则这些设备直接标记失败
       if (running) {
         const invisible = devices.filter((d) => d._status === 'pending');
         if (invisible.length > 0) {
-          log(`===== 进入盲连兜底阶段：剩余 ${invisible.length} 台从未扫到的设备 =====`);
-          try {
-            const finalNets = await wifiManager.scan(true);
-            scanState.merge(finalNets);
-            applyScanFlagsToDevices(devices, scanState.lookup);
-            sendWifiList(finalNets);
-            const ssidList = formatScannedSsidList(finalNets);
-            log(
-              `[兜底] 最终扫描：${finalNets.length} 个网络` +
-                (ssidList ? `\n  SSID 列表: ${ssidList}` : ''),
+          if (!config.enableBlindFallback) {
+            log(`===== 剩余 ${invisible.length} 台从未扫到的设备（盲连兜底未开启，直接标记失败）=====`);
+            invisible.sort((a, b) =>
+              String(a.sn || '').localeCompare(String(b.sn || '')),
             );
-          } catch (e) {
-            log(`[兜底] 最终扫描失败: ${e.message}`);
-          }
-
-          invisible.sort((a, b) =>
-            String(a.sn || '').localeCompare(String(b.sn || '')),
-          );
-          for (const dev of invisible) {
-            if (!running) break;
-            if (dev._status !== 'pending') continue;
-            const key = WifiManager.normalizeSsid(dev.wifiName);
-            if (key && scanState.lookup.has(key)) {
-              await processOneDevice(dev, scanState, config);
-            } else {
-              await processOneDeviceBlind(dev, config);
+            for (const dev of invisible) {
+              if (!running) break;
+              if (dev._status !== 'pending') continue;
+              const remark = `未扫描到 WiFi「${dev.wifiName}」（本轮扫描未命中；如需仍然尝试连接请开启「盲连兜底」）`;
+              log(remark);
+              dev._status = 'failed';
+              dev._failRemark = remark;
+              sendDeviceUpdate(dev);
+              await reportResult(dev, 0, false, config, undefined, undefined, remark);
+              processedCount += 1;
             }
-            processedCount += 1;
+          } else {
+            log(`===== 进入盲连兜底阶段：剩余 ${invisible.length} 台从未扫到的设备 =====`);
+            try {
+              const finalNets = await wifiManager.scan(true);
+              scanState.merge(finalNets);
+              applyScanFlagsToDevices(devices, scanState.lookup);
+              sendWifiList(finalNets);
+              const ssidList = formatScannedSsidList(finalNets);
+              log(
+                `[兜底] 最终扫描：${finalNets.length} 个网络` +
+                  (ssidList ? `\n  SSID 列表: ${ssidList}` : ''),
+              );
+            } catch (e) {
+              log(`[兜底] 最终扫描失败: ${e.message}`);
+            }
+
+            invisible.sort((a, b) =>
+              String(a.sn || '').localeCompare(String(b.sn || '')),
+            );
+            for (const dev of invisible) {
+              if (!running) break;
+              if (dev._status !== 'pending') continue;
+              const key = WifiManager.normalizeSsid(dev.wifiName);
+              if (key && scanState.lookup.has(key)) {
+                await processOneDevice(dev, scanState, config);
+              } else {
+                await processOneDeviceBlind(dev, config);
+              }
+              processedCount += 1;
+            }
           }
         }
       }

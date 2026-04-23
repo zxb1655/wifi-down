@@ -18,6 +18,8 @@ const DEFAULTS = {
   /** 每台设备跑流量时，随机目标区间（MB，含端点整数） */
   trafficMinMB: 100,
   trafficMaxMB: 200,
+  /** 批量任务收尾时，是否对从未被扫描到的设备尝试盲连 netsh wlan connect */
+  enableBlindFallback: false,
   testUrls: [],
 };
 
@@ -87,6 +89,7 @@ class ConfigManager {
       wifiListRefreshSec,
       trafficMinMB: tMin,
       trafficMaxMB: tMax,
+      enableBlindFallback: !!config.enableBlindFallback,
       testUrls: Array.isArray(config.testUrls) ? config.testUrls : DEFAULTS.testUrls,
     };
     fs.writeFileSync(this._writablePath, JSON.stringify(data, null, 2), 'utf-8');

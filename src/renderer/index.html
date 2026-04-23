@@ -40,6 +40,14 @@
         <input type="number" id="trafficMaxMB" min="1" max="50000" value="200" title="每台随机目标上限 (MB)">
         <span class="input-suffix">MB</span>
       </div>
+      <div class="config-group">
+        <label class="checkbox-label" for="enableBlindFallback">
+          <input type="checkbox" id="enableBlindFallback">
+          <span>盲连兜底</span>
+        </label>
+        <span class="info-tip" tabindex="0" aria-label="盲连兜底说明"
+          data-tip="勾选：需要跑量的设备如果没有扫描到WIFI，也会尝试连接。&#10;关闭：未扫描到WiFi的设备将不会跑量，不会尝试连接。">?</span>
+      </div>
     </div>
     <div class="config-row actions-row">
       <button id="btnStart" class="btn btn-primary">开始跑量</button>
