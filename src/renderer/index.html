@@ -14,6 +14,10 @@
         <label>API 地址</label>
         <input type="text" id="baseUrl" placeholder="http://192.168.1.100:8080" spellcheck="false">
       </div>
+      <div class="config-group" id="computerKeyGroup">
+        <label>电脑标识</label>
+        <input type="text" id="computerKey" placeholder="用于判断跑量的设备" spellcheck="false" title="获取设备列表时作为 key 参数传给后端，用于区分不同电脑">
+      </div>
       <div class="config-group">
         <label>备用 WiFi</label>
         <input type="text" id="backupWifiName" placeholder="WiFi 名称" spellcheck="false">
@@ -28,12 +32,6 @@
         <label>跑量时刷 WiFi</label>
         <input type="number" id="wifiListRefreshSec" min="0" max="3600" value="45" placeholder="秒" title="批量跑量过程中每隔多少秒重新扫描 WiFi；0=仅在开始时扫一次">
         <span class="input-suffix">秒</span>
-      </div>
-      <div class="config-group">
-        <label>定时</label>
-        <input type="number" id="timerInterval" min="0" step="any" value="0" placeholder="0=关闭" title="定时间隔（小时）">
-        <span class="input-suffix">小时</span>
-        <button id="btnToggleTimer" class="btn btn-sm">启用定时</button>
       </div>
       <div class="config-group" id="trafficRangeGroup">
         <label>跑量范围</label>

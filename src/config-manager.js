@@ -7,12 +7,10 @@ const CONFIG_NAME = 'config.json';
 /** 测速链接以项目目录下 config.json 的 testUrls 为准；项可为 { url, referer?, name? } */
 const DEFAULTS = {
   baseUrl: '',
+  /** 当前电脑标识（获取设备列表时作为 key 参数传给后端） */
+  computerKey: '',
   backupWifiName: '',
   backupWifiPassword: '',
-  /** 定时间隔，单位：小时（仅小时） */
-  timerInterval: 0,
-  /** 已废弃：保留用于读取旧配置时换算为小时 */
-  timerUnit: 'hour',
   /** 连接上目标 WiFi 并校验通过后，等待多少秒再开始跑流量（部分机器需等 DHCP/路由就绪） */
   wifiReadyDelaySec: 0,
   /** 批量跑量时自动重新扫描 WiFi 的间隔（秒）；0 表示仅在任务开始时扫一次 */
@@ -82,10 +80,9 @@ class ConfigManager {
     }
     const data = {
       baseUrl: config.baseUrl ?? DEFAULTS.baseUrl,
+      computerKey: config.computerKey ?? DEFAULTS.computerKey,
       backupWifiName: config.backupWifiName ?? DEFAULTS.backupWifiName,
       backupWifiPassword: config.backupWifiPassword ?? DEFAULTS.backupWifiPassword,
-      timerInterval: config.timerInterval ?? DEFAULTS.timerInterval,
-      timerUnit: 'hour',
       wifiReadyDelaySec: wifiReady,
       wifiListRefreshSec,
       trafficMinMB: tMin,

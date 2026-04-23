@@ -239,11 +239,11 @@ async function ensureWifiConnectedTo(expectedSsid, logPrefix = '') {
 
 /** 先直连 API 拉取设备；失败且配置了备用 WiFi 时，连备用后再试一次（避免当前无网） */
 async function fetchDevicesWithNetworkFallback(config) {
-  const { baseUrl, backupWifiName, backupWifiPassword } = config;
+  const { baseUrl, backupWifiName, backupWifiPassword, computerKey } = config;
   if (!baseUrl) throw new Error('未配置 API 地址');
   apiClient.setBaseUrl(baseUrl);
   try {
-    return await apiClient.fetchDevices();
+    return await apiClient.fetchDevices(computerKey);
   } catch (firstErr) {
     if (!backupWifiName) throw firstErr;
     log(`获取设备列表失败（${firstErr.message}），尝试连接备用 WiFi「${backupWifiName}」后重试...`);
@@ -256,7 +256,7 @@ async function fetchDevicesWithNetworkFallback(config) {
       log(`连接备用 WiFi 失败: ${wifiErr.message}`);
       throw firstErr;
     }
-    return await apiClient.fetchDevices();
+    return await apiClient.fetchDevices(computerKey);
   }
 }
 

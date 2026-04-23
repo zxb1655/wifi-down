@@ -7,8 +7,6 @@ const state = {
   running: false,
   runningMode: 'none', // none | bulk | single-queue
   testing: false,
-  timerId: null,
-  timerEnabled: false,
   singleQueue: [],
   singleQueueSet: new Set(),
   singleQueueRunning: false,
@@ -17,12 +15,11 @@ const state = {
 };
 
 const elBaseUrl = $('#baseUrl');
+const elComputerKey = $('#computerKey');
 const elBackupName = $('#backupWifiName');
 const elBackupPass = $('#backupWifiPassword');
-const elTimerInterval = $('#timerInterval');
 const elWifiReadyDelaySec = $('#wifiReadyDelaySec');
 const elWifiListRefreshSec = $('#wifiListRefreshSec');
-const elBtnTimer = $('#btnToggleTimer');
 const elBtnStart = $('#btnStart');
 const elBtnStop = $('#btnStop');
 const elBtnScan = $('#btnScan');
@@ -421,6 +418,7 @@ function setTesting(val) {
 function getConfig() {
   return {
     baseUrl: elBaseUrl.value.trim(),
+    computerKey: elComputerKey.value.trim(),
     backupWifiName: elBackupName.value.trim(),
     backupWifiPassword: elBackupPass.value.trim(),
   };
@@ -431,10 +429,9 @@ function getFullConfig() {
   const listRefresh = parseInt(elWifiListRefreshSec.value, 10);
   return {
     baseUrl: elBaseUrl.value.trim(),
+    computerKey: elComputerKey.value.trim(),
     backupWifiName: elBackupName.value.trim(),
     backupWifiPassword: elBackupPass.value.trim(),
-    timerInterval: parseFloat(elTimerInterval.value) || 0,
-    timerUnit: 'hour',
     wifiReadyDelaySec: Number.isFinite(readySec) ? Math.max(0, Math.min(86400, readySec)) : 0,
     wifiListRefreshSec: Number.isFinite(listRefresh)
       ? Math.max(0, Math.min(3600, listRefresh))
@@ -455,13 +452,9 @@ function scheduleSaveConfig() {
 
 function applyConfig(cfg) {
   if (cfg.baseUrl) elBaseUrl.value = cfg.baseUrl;
+  if (cfg.computerKey) elComputerKey.value = cfg.computerKey;
   if (cfg.backupWifiName) elBackupName.value = cfg.backupWifiName;
   if (cfg.backupWifiPassword) elBackupPass.value = cfg.backupWifiPassword;
-  if (cfg.timerInterval != null && cfg.timerInterval !== '') {
-    let hours = parseFloat(cfg.timerInterval) || 0;
-    if (cfg.timerUnit === 'min') hours = hours / 60;
-    elTimerInterval.value = hours;
-  }
   if (cfg.wifiReadyDelaySec != null && cfg.wifiReadyDelaySec !== '') {
     elWifiReadyDelaySec.value = cfg.wifiReadyDelaySec;
   } else {
@@ -682,36 +675,7 @@ elBtnStopTest.addEventListener('click', async () => {
   await window.api.stopTest();
 });
 
-elBtnTimer.addEventListener('click', () => {
-  if (state.timerEnabled) {
-    clearInterval(state.timerId);
-    state.timerId = null;
-    state.timerEnabled = false;
-    elBtnTimer.textContent = '启用定时';
-    appendLog('[UI] 定时任务已关闭');
-  } else {
-    const val = parseFloat(elTimerInterval.value);
-    if (!val || val <= 0) {
-      appendLog('[UI] 请输入有效的定时间隔（小时）');
-      return;
-    }
-    const ms = val * 60 * 60 * 1000;
-
-    state.timerEnabled = true;
-    elBtnTimer.textContent = '关闭定时';
-    appendLog(`[UI] 定时任务已启用，每 ${val} 小时执行一次`);
-    state.timerId = setInterval(async () => {
-      if (state.running) {
-        appendLog('[UI] 定时触发: 上一次任务仍在执行，跳过');
-        return;
-      }
-      appendLog('[UI] 定时触发: 自动开始跑量');
-      elBtnStart.click();
-    }, ms);
-  }
-});
-
-[elBaseUrl, elBackupName, elBackupPass, elTimerInterval, elWifiReadyDelaySec, elWifiListRefreshSec, elTrafficMinMB, elTrafficMaxMB].forEach(el => {
+[elBaseUrl, elComputerKey, elBackupName, elBackupPass, elWifiReadyDelaySec, elWifiListRefreshSec, elTrafficMinMB, elTrafficMaxMB].forEach(el => {
   if (el) el.addEventListener('input', scheduleSaveConfig);
 });
 

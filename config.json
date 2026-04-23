@@ -1,9 +1,8 @@
 {
   "baseUrl": "http://boss.juhuoiot.com/",
+  "computerKey": "",
   "backupWifiName": "",
   "backupWifiPassword": "",
-  "timerInterval": 0,
-  "timerUnit": "hour",
   "wifiReadyDelaySec": 10,
   "wifiListRefreshSec": 45,
   "trafficMinMB": 100,

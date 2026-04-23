@@ -25,9 +25,11 @@ class ApiClient {
     this.baseUrl = url?.replace(/\/+$/, '') || '';
   }
 
-  async fetchDevices() {
+  async fetchDevices(key) {
     if (!this.baseUrl) throw new Error('未配置 API 地址');
-    const url = `${this.baseUrl}/bms-sim/check/device/findSpeedDevice`;
+    const k = key != null ? String(key).trim() : '';
+    const qs = k ? `?key=${encodeURIComponent(k)}` : '';
+    const url = `${this.baseUrl}/bms-sim/check/device/findSpeedDevice${qs}`;
     this._line(`[API] GET findSpeedDevice 请求 URL: ${url}`);
     const res = await fetch(url, { timeout: 15000 });
     const text = await res.text();

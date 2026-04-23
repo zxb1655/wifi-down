@@ -1,0 +1,61 @@
+[09:59:06] 配置文件: D:\project\wifi-down\config.json
+[09:59:06] 日志目录: D:\project\wifi-down\logs
+[09:59:13] ===== 开始跑量任务 =====
+[09:59:13] 正在获取设备列表...
+[09:59:13] [API] GET findSpeedDevice 请求 URL: http://boss.juhuoiot.com/bms-sim/check/device/findSpeedDevice?key=%E7%94%B5%E8%84%911
+[09:59:13] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[],"msg":"操作成功"}
+[09:59:13] 获取到 0 个设备
+[09:59:13] 没有待测速设备
+[09:59:20] ===== 开始跑量任务 =====
+[09:59:20] 正在获取设备列表...
+[09:59:20] [API] GET findSpeedDevice 请求 URL: http://boss.juhuoiot.com/bms-sim/check/device/findSpeedDevice
+[09:59:20] [API] findSpeedDevice 响应 HTTP 200 body: {"code":"0","data":[{"key":null,"sn":"26862531001375","wifiName":"JH-26862531001375","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001293","wifiName":"JH-26862531001293","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001371","wifiName":"JH-26862531001371","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001274","wifiName":"JH-26862531001274","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002243","wifiName":"JH-26862531002243","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002386","wifiName":"JH-26862531002386","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001286","wifiName":"JH-26862531001286","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001323","wifiName":"JH-26862531001323","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000734","wifiName":"JH-26862531000734","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002557","wifiName":"JH-26862531002557","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001635","wifiName":"JH-26862531001635","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001977","wifiName":"JH-26862531001977","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002551","wifiName":"JH-26862531002551","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001290","wifiName":"JH-26862531001290","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001316","wifiName":"JH-26862531001316","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002728","wifiName":"JH-26862531002728","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000429","wifiName":"JH-26862531000429","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001040","wifiName":"JH-26862531001040","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001291","wifiName":"JH-26862531001291","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000791","wifiName":"JH-26862531000791","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002196","wifiName":"JH-26862531002196","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002698","wifiName":"JH-26862531002698","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000034","wifiName":"JH-26862531000034","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001873","wifiName":"JH-26862531001873","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001325","wifiName":"JH-26862531001325","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001271","wifiName":"JH-26862531001271","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002396","wifiName":"JH-26862531002396","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000516","wifiName":"JH-26862531000516","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002318","wifiName":"JH-26862531002318","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002752","wifiName":"JH-26862531002752","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002935","wifiName":"JH-26862531002935","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002436","wifiName":"JH-26862531002436","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002905","wifiName":"JH-26862531002905","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001334","wifiName":"JH-26862531001334","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002644","wifiName":"JH-26862531002644","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001269","wifiName":"JH-26862531001269","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002824","wifiName":"JH-26862531002824","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001297","wifiName":"JH-26862531001297","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001458","wifiName":"JH-26862531001458","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000726","wifiName":"JH-26862531000726","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000529","wifiName":"JH-26862531000529","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001308","wifiName":"JH-26862531001308","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002932","wifiName":"JH-26862531002932","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002829","wifiName":"JH-26862531002829","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002847","wifiName":"JH-26862531002847","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002837","wifiName":"JH-26862531002837","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002787","wifiName":"JH-26862531002787","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002416","wifiName":"JH-26862531002416","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002465","wifiName":"JH-26862531002465","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002953","wifiName":"JH-26862531002953","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002454","wifiName":"JH-26862531002454","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000540","wifiName":"JH-26862531000540","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002435","wifiName":"JH-26862531002435","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002530","wifiName":"JH-26862531002530","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001665","wifiName":"JH-26862531001665","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001642","wifiName":"JH-26862531001642","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000515","wifiName":"JH-26862531000515","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000732","wifiName":"JH-26862531000732","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000752","wifiName":"JH-26862531000752","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531000625","wifiName":"JH-26862531000625","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531001448","wifiName":"JH-26862531001448","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002769","wifiName":"JH-26862531002769","wifiPassword":"juhuo123456"},{"key":null,"sn":"26862531002703","wifiName":"JH-26862531002703","wifiPassword":"juhuo1234…(已截断)
+[09:59:20] 获取到 292 个设备
+[09:59:20] 正在扫描 WiFi 网络...
+[09:59:25] 扫描到 13 个网络
+  SSID 列表: JHKJ_2.4G(87%)、gctest-001(86%)、JH-1911_5G(85%)、JHKJ_5G(85%)、TP-LINK_C6C6(84%)、JHKJ_18_5G(84%)、manager(83%)、JH-000953(83%)、DIRECT-T7WINDOWS-87ELFHFmsFB(78%)、JHKJ_18_2.4G(78%)、JH-000341-5G(78%)、screenTest_5G(48%)、TP-LINK_0986(30%)
+[09:59:25] 批量任务：优先处理当前扫描到的热点；WiFi 列表每 45 秒自动刷新一次
+[09:59:25] ===== 进入盲连兜底阶段：剩余 292 台从未扫到的设备 =====
+[09:59:29] [兜底] 最终扫描：14 个网络
+  SSID 列表: JHKJ_2.4G(88%)、gctest-001(86%)、JHKJ_18_2.4G(85%)、TP-LINK_C6C6(84%)、JH-1911_5G(84%)、JHKJ_18_5G(84%)、JHKJ_5G(84%)、JH-000341-2.4G(83%)、JH-000953(83%)、manager(82%)、DIRECT-T7WINDOWS-87ELFHFmsFB(77%)、JH-000341-5G(77%)、TP-LINK_0986(60%)、screenTest_5G(48%)
+[09:59:29] [兜底] --- 处理设备: 26862531000003 (JH-26862531000003) ---
+[09:59:29] [兜底] 未扫描到 WiFi "JH-26862531000003"，尝试直接连接...
+[09:59:31] [WiFi] 开始连接 SSID「JH-26862531000003」
+  主无线接口: WLAN
+  密码长度: 11（内容不记录）
+  扫描结果: 当前未提供认证/加密信息，将进入兼容模式
+  推断认证: 未知 | 推断加密: 未知
+  已清理同名无线配置文件（若存在），随后按多种认证组合依次尝试。
+[09:59:31] [WiFi] 连接尝试 1/14: WPA2-PSK/AES
+  XML: profileNs=v1 | connectionMode=auto | authentication=WPA2PSK | encryption=AES | transitionMode=auto | sharedKey=yes | user=all | mark=wpa2-aes
+[09:59:31] [WiFi] 已添加配置文件「JH-26862531000003」（本步 netsh 返回成功；user=all）
+[09:59:31] [WiFi] 执行: netsh wlan connect name="JH-26862531000003" ssid="JH-26862531000003" interface="WLAN"
+[09:59:31] [WiFi] 尝试 1/14 失败（WPA2-PSK/AES）:
+netsh wlan connect name="JH-26862531000003" ssid="JH-26862531000003" interface="WLAN"
+配置文件“JH-26862531000003”指定的网络无法用于连接。
+[09:59:32] [WiFi] 连接尝试 2/14: WPA2-PSK/AES
+  XML: profileNs=v1 | connectionMode=auto | authentication=WPA2PSK | encryption=AES | transitionMode=auto | sharedKey=yes | user=current | mark=wpa2-aes
+[09:59:32] [WiFi] 已添加配置文件「JH-26862531000003」（本步 netsh 返回成功；user=current）
+[09:59:32] [WiFi] 执行: netsh wlan connect name="JH-26862531000003" ssid="JH-26862531000003" interface="WLAN"
+[09:59:33] [WiFi] 尝试 2/14 失败（WPA2-PSK/AES）:
+netsh wlan connect name="JH-26862531000003" ssid="JH-26862531000003" interface="WLAN"
+配置文件“JH-26862531000003”指定的网络无法用于连接。
+[09:59:34] [WiFi] 连接尝试 3/14: WPA2-PSK/AES(手动连接)
+  XML: profileNs=v1 | connectionMode=manual | authentication=WPA2PSK | encryption=AES | transitionMode=auto | sharedKey=yes | user=all | mark=wpa2-aes-manual
+[09:59:34] [WiFi] 已添加配置文件「JH-26862531000003」（本步 netsh 返回成功；user=all）
+[09:59:34] [WiFi] 执行: netsh wlan connect name="JH-26862531000003" ssid="JH-26862531000003" interface="WLAN"
+[09:59:34] [WiFi] netsh connect 已返回，正在等待系统关联 SSID（最多约 30s）…
+[10:00:05] [WiFi] 尝试 3/14 失败（WPA2-PSK/AES(手动连接)）:
+连接 WiFi "JH-26862531000003" 超时（30000ms 内未关联；当前系统 SSID=JHKJ_2.4G）
+最近 WLAN 事件:
+[17:59:37][Event 8002] WLAN 自动配置服务无法连接到无线网络。 | | 网络适配器: RZ608 Wi-Fi 6E 80MHz | 接口 GUID: {6d91f64b-d27e-4051-b739-e453560c7d31} | 连接模式: 使用配置文件手动连接 | 配置文件名称: JH-26862531000003 | SSID: JH-26862531000003 | BSS 类型: Infrastructure | 失败原因:特定的网络不可用。 | RSSI: 255 |
+[17:59:35][Event 11000] 已开始无线网络关联。 | | 网络适配器: RZ608 Wi-Fi 6E 80MHz | 接口 GUID: {6d91f64b-d27e-4051-b739-e453560c7d31} | 本地 MAC 地址: 38:D5:7A:22:21:89 | 网络 SSID: JH-26862531000003 | BSS 类型: Infrastructure | 身份验证: WPA2-Personal | 加密: AES-GCMP-128 | 802.1X 已启用: No |
+[17:59:35][Event 8000] WLAN 自动配置服务已开始连接无线网络。 | | 网络适配器: RZ608 Wi-Fi 6E 80MHz | 接口 GUID: {6d91f64b-d27e-4051-b739-e453560c7d31} | 连接模式: 使用配置文件手动连接 | 配置文件名称: JH-26862531000003 | SSID: JH-26862531000003 | BSS 类型: Infrastructure |
+[10:00:07] [WiFi] 连接尝试 4/14: WPA2-PSK/AES(手动连接)
+  XML: profileNs=v1 | connectionMode=manual | authentication=WPA2PSK | encryption=AES | transitionMode=auto | sharedKey=yes | user=current | mark=wpa2-aes-manual
+[10:00:07] [WiFi] 已添加配置文件「JH-26862531000003」（本步 netsh 返回成功；user=current）
+[10:00:07] [WiFi] 执行: netsh wlan connect name="JH-26862531000003" ssid="JH-26862531000003" interface="WLAN"
+[10:00:07] [WiFi] netsh connect 已返回，正在等待系统关联 SSID（最多约 30s）…
+[10:00:14] [WiFi] 定时刷新：15 个网络
+  SSID 列表: JHKJ_2.4G(87%)、JH-1911_5G(84%)、JHKJ_5G(84%)、gctest-001(84%)、JH-000341-2.4G(83%)、JHKJ_18_5G(83%)、JH-000953(81%)、JH-000341-5G(79%)、DIRECT-T7WINDOWS-87ELFHFmsFB(78%)、JHKJ_18_2.4G(77%)、TP-LINK_C6C6(63%)、manager(63%)、TP-LINK_0986(60%)、screenTest_5G(42%)、miki_manager5G(27%)
+[10:00:24] 任务已停止
