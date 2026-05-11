@@ -44,6 +44,35 @@ class ApiClient {
     return Array.isArray(data) ? data : (data.data || data.result || []);
   }
 
+  async rebootDevice(sn) {
+    if (!this.baseUrl) throw new Error('未配置 API 地址');
+    const snStr = sn != null ? String(sn).trim() : '';
+    if (!snStr) throw new Error('重启设备失败: SN 为空');
+    const url = `${this.baseUrl}/bms-portal/device/sendCmd703?sn=${encodeURIComponent(snStr)}`;
+    this._line(`[API] GET sendCmd703 请求 URL: ${url}`);
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-Token': '94f9cca32048499fb194aec9211d0f80cmp',
+        'R-Source': 'CMP',
+      },
+      timeout: 15000,
+    });
+    const text = await res.text();
+    this._line(`[API] sendCmd703 响应 HTTP ${res.status} body: ${truncateForLog(text || '(空)')}`);
+    if (!res.ok) throw new Error(`重启设备失败: HTTP ${res.status}`);
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch (_) {}
+    if (data && typeof data === 'object') {
+      const code = data.code;
+      const okCode = code == null || code === 0 || code === 200 || code === '0' || code === '200' || code === true;
+      if (!okCode) {
+        throw new Error(`重启设备失败: ${data.message || data.msg || `code=${code}`}`);
+      }
+    }
+    return data || { ok: true };
+  }
+
   async uploadRecord(record) {
     if (!this.baseUrl) throw new Error('未配置 API 地址');
     const url = `${this.baseUrl}/bms-sim/check/device/speed/record/uploadSpeedRecord`;

@@ -30,6 +30,12 @@ let running = false;
 let batchStopRequested = false;
 let testingAborted = false;
 let testAbortEmitter = null;
+/**
+ * 跑量失败的设备等待重启队列：跑量失败时该设备所处的客户 WiFi 多半已无网络，
+ * 无法立即调用 BOSS 的重启接口；先入队，等到下一次有设备跑量成功（此刻我们
+ * 处于一个有网络的 WiFi）时再顺带把队列里的设备逐个下发重启命令。
+ */
+const pendingRebootDevices = new Map();
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -313,6 +319,46 @@ async function reconnectBackupWifiAfterTask(config) {
   }
 }
 
+function queueDeviceReboot(device, reason) {
+  if (!device || !device.sn) return;
+  const sn = String(device.sn);
+  if (pendingRebootDevices.has(sn)) return;
+  pendingRebootDevices.set(sn, {
+    sn,
+    wifiName: device.wifiName || '',
+    reason: reason || '',
+  });
+  log(
+    `[重启队列] 加入待重启设备 ${sn}（${device.wifiName || '未知 WiFi'}）` +
+      (reason ? `，原因: ${reason}` : '') +
+      `，当前队列 ${pendingRebootDevices.size} 台`,
+  );
+}
+
+async function flushPendingDeviceReboots(triggerSn) {
+  if (pendingRebootDevices.size === 0) return;
+  const items = Array.from(pendingRebootDevices.values());
+  log(
+    `[重启队列] 借助设备 ${triggerSn || '?'} 的在线网络，开始下发 ${items.length} 台失败设备的重启命令...`,
+  );
+  for (const item of items) {
+    try {
+      await apiClient.rebootDevice(item.sn);
+      log(`[重启队列] 已下发重启: ${item.sn}（${item.wifiName || '未知 WiFi'}）`);
+      pendingRebootDevices.delete(item.sn);
+    } catch (e) {
+      log(
+        `[重启队列] 重启失败: ${item.sn}（${item.wifiName || '未知 WiFi'}）- ${e.message}，保留待下次再试`,
+      );
+    }
+  }
+  if (pendingRebootDevices.size > 0) {
+    log(`[重启队列] 仍有 ${pendingRebootDevices.size} 台设备未成功下发重启，等待下一次机会`);
+  } else {
+    log('[重启队列] 全部待重启设备已成功下发');
+  }
+}
+
 // ---- IPC Handlers ----
 
 ipcMain.handle('load-config', () => {
@@ -481,6 +527,7 @@ async function processOneDevice(device, scanState, config) {
     device._status = 'failed';
     device._failRemark = remark;
     sendDeviceUpdate(device);
+    queueDeviceReboot(device, remark);
     await reportResult(device, 0, false, config, undefined, undefined, remark);
     return;
   }
@@ -506,6 +553,7 @@ async function processOneDevice(device, scanState, config) {
     device._status = 'failed';
     device._failRemark = remark;
     sendDeviceUpdate(device);
+    queueDeviceReboot(device, remark);
     await reportResult(device, 0, false, config, undefined, undefined, remark);
     return;
   }
@@ -554,6 +602,11 @@ async function processOneDevice(device, scanState, config) {
 
   const speedEndTime = formatTime(new Date());
   const success = device._status === 'success';
+
+  // 用户主动停止时设备并非真的"跑量失败"，不入队避免下次任务平白重启
+  if (!success && !batchStopRequested) {
+    queueDeviceReboot(device, trafficFailRemark);
+  }
 
   await reportResult(
     device,
@@ -616,6 +669,7 @@ async function processOneDeviceBlind(device, config) {
     device._status = 'failed';
     device._failRemark = remark;
     sendDeviceUpdate(device);
+    queueDeviceReboot(device, remark);
     await reportResult(device, 0, false, config, undefined, undefined, remark);
     return;
   }
@@ -664,6 +718,10 @@ async function processOneDeviceBlind(device, config) {
 
   const speedEndTime = formatTime(new Date());
   const success = device._status === 'success';
+
+  if (!success && !batchStopRequested) {
+    queueDeviceReboot(device, trafficFailRemark);
+  }
 
   await reportResult(
     device,
@@ -850,6 +908,7 @@ ipcMain.handle('start-task', async (_e, config) => {
               dev._status = 'failed';
               dev._failRemark = remark;
               sendDeviceUpdate(dev);
+              queueDeviceReboot(dev, remark);
               await reportResult(dev, 0, false, config, undefined, undefined, remark);
               processedCount += 1;
             }
@@ -883,6 +942,57 @@ ipcMain.handle('start-task', async (_e, config) => {
               }
               processedCount += 1;
             }
+          }
+        }
+      }
+
+      // 第三阶段：失败设备重试 —— 所有设备走完后，再扫描一次 WiFi 列表，
+      // 把"当前仍能扫到 SSID 的失败设备"重置为 pending 再跑一遍；
+      // 经过前面的成功上报，刚才入队的失败设备此时多数应已被下发重启命令，
+      // 再扫一次更能反映真实在线状态
+      if (running) {
+        const failedDevices = devices.filter((d) => d._status === 'failed');
+        if (failedDevices.length > 0) {
+          log(`===== 失败设备重试阶段：共 ${failedDevices.length} 台失败设备，检查是否仍可扫描到 =====`);
+          let retryScan = [];
+          try {
+            retryScan = await wifiManager.scan(true);
+            scanState.merge(retryScan);
+            applyScanFlagsToDevices(devices, scanState.lookup);
+            sendWifiList(retryScan);
+            const ssidList = formatScannedSsidList(retryScan);
+            log(
+              `[重试] 重试前扫描：${retryScan.length} 个网络` +
+                (ssidList ? `\n  SSID 列表: ${ssidList}` : ''),
+            );
+          } catch (e) {
+            log(`[重试] 扫描失败: ${e.message}`);
+          }
+          const retryLookup = buildScanLookup(retryScan);
+          const retryTargets = failedDevices.filter((d) => {
+            const k = WifiManager.normalizeSsid(d.wifiName);
+            return k && retryLookup.has(k);
+          });
+          if (retryTargets.length === 0) {
+            log('[重试] 暂无失败设备的 WiFi 在本次扫描中出现，跳过重试');
+          } else {
+            log(`[重试] ${retryTargets.length} 台失败设备的 WiFi 已重新扫到，开始重试`);
+            retryTargets.sort((a, b) => comparePendingDevices(a, b, retryLookup));
+            let retrySuccess = 0;
+            for (const dev of retryTargets) {
+              if (!running) break;
+              log(`[重试] 重置设备 ${dev.sn}（${dev.wifiName}）为待跑量并重试`);
+              dev._status = 'pending';
+              dev._flow = 0;
+              dev._failRemark = '';
+              sendDeviceUpdate(dev);
+              await processOneDevice(dev, scanState, config);
+              if (dev._status === 'success') retrySuccess += 1;
+            }
+            log(
+              `[重试] 重试阶段完成：${retryTargets.length} 台中 ${retrySuccess} 台成功，` +
+                `${retryTargets.length - retrySuccess} 台仍失败`,
+            );
           }
         }
       }
@@ -956,6 +1066,16 @@ async function reportResult(device, downloadedBytes, success, config, startTime,
 
   if (!uploaded) {
     log(`警告: 设备 ${device.sn} 的结果未能成功上报`);
+  }
+
+  // 仅在"设备本次跑量成功 + 已成功上报"时才尝试下发重启：此刻我们确信
+  // 当前所处的 WiFi 是带网络的，能调通 BOSS 的 sendCmd703 接口
+  if (uploaded && success) {
+    try {
+      await flushPendingDeviceReboots(device.sn);
+    } catch (e) {
+      log(`[重启队列] 处理异常: ${e.message}`);
+    }
   }
 }
 
