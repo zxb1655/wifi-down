@@ -12,6 +12,10 @@ const state = {
   singleQueueRunning: false,
   singleCurrentSn: '',
   advancedVisible: false,
+  /** 定时自动跑量：下次触发的绝对时间戳（ms），未启用时为 0 */
+  autoScheduleNextAt: 0,
+  /** 由于在跑量中而被跳过的本次定时（仅用于状态显示） */
+  autoSchedulePending: false,
 };
 
 const elBaseUrl = $('#baseUrl');
@@ -20,6 +24,7 @@ const elBackupName = $('#backupWifiName');
 const elBackupPass = $('#backupWifiPassword');
 const elWifiReadyDelaySec = $('#wifiReadyDelaySec');
 const elWifiListRefreshSec = $('#wifiListRefreshSec');
+const elTrafficNoProgressTimeoutSec = $('#trafficNoProgressTimeoutSec');
 const elBtnStart = $('#btnStart');
 const elBtnStop = $('#btnStop');
 const elBtnScan = $('#btnScan');
@@ -27,8 +32,10 @@ const elBtnFetch = $('#btnFetchDevices');
 const elTaskStatus = $('#taskStatus');
 const elDeviceList = $('#deviceList');
 const elDeviceCount = $('#deviceCount');
+const elScannedDeviceCount = $('#scannedDeviceCount');
 const elWifiList = $('#wifiList');
 const elWifiCount = $('#wifiCount');
+const elMatchedWifiCount = $('#matchedWifiCount');
 const elTestUrlSelect = $('#testUrlSelect');
 const elTestUrlMB = $('#testUrlMB');
 const elBtnTestUrl = $('#btnTestUrl');
@@ -44,6 +51,9 @@ const elTestToolsRow = $('#testToolsRow');
 const elTrafficMinMB = $('#trafficMinMB');
 const elTrafficMaxMB = $('#trafficMaxMB');
 const elEnableBlindFallback = $('#enableBlindFallback');
+const elEnableAutoSchedule = $('#enableAutoSchedule');
+const elAutoScheduleHours = $('#autoScheduleHours');
+const elAutoScheduleStatus = $('#autoScheduleStatus');
 
 function formatBytes(bytes) {
   if (bytes < 1024) return bytes + ' B';
@@ -129,13 +139,27 @@ function buildSignalBars(signal) {
   return `<div class="wifi-signal-bars${cls}">${bars}</div>`;
 }
 
+function getScannedDeviceCount() {
+  return state.devices.filter(d => d._scanVisible).length;
+}
+
+function getMatchedWifiCount() {
+  const wifiNames = new Set(state.wifiList.map(w => normalizeSsidMatch(w.ssid)).filter(Boolean));
+  return state.devices.filter(d => {
+    const k = normalizeSsidMatch(d.wifiName);
+    return k && wifiNames.has(k);
+  }).length;
+}
+
 function renderDevices() {
   if (state.devices.length === 0) {
     elDeviceList.innerHTML = '<div class="empty-hint">点击"获取设备"加载列表</div>';
     elDeviceCount.textContent = '0';
+    if (elScannedDeviceCount) elScannedDeviceCount.textContent = '已扫描到 0';
     return;
   }
   elDeviceCount.textContent = state.devices.length;
+  if (elScannedDeviceCount) elScannedDeviceCount.textContent = `已扫描到 ${getScannedDeviceCount()}`;
   const sorted = sortDevicesForDisplay(state.devices);
   elDeviceList.innerHTML = sorted.map(d => {
     const status = d._status || 'pending';
@@ -207,14 +231,16 @@ function renderWifiList() {
   if (state.wifiList.length === 0) {
     elWifiList.innerHTML = '<div class="empty-hint">点击"扫描 WiFi"加载列表</div>';
     elWifiCount.textContent = '0';
+    if (elMatchedWifiCount) elMatchedWifiCount.textContent = '匹配成功 0';
     return;
   }
   elWifiCount.textContent = state.wifiList.length;
+  if (elMatchedWifiCount) elMatchedWifiCount.textContent = `匹配成功 ${getMatchedWifiCount()}`;
 
-  const deviceNames = new Set(state.devices.map(d => d.wifiName));
+  const deviceNames = new Set(state.devices.map(d => normalizeSsidMatch(d.wifiName)).filter(Boolean));
 
   elWifiList.innerHTML = state.wifiList.map(w => {
-    const matched = deviceNames.has(w.ssid);
+    const matched = deviceNames.has(normalizeSsidMatch(w.ssid));
     const pct = parseSignalPercent(w.signal);
     return `
       <div class="wifi-item ${matched ? 'matched' : ''}">
@@ -425,9 +451,105 @@ function getConfig() {
   };
 }
 
+/** @returns {number} 合法范围内的小时数，回退为 24 */
+function getAutoScheduleHours() {
+  const v = parseFloat(elAutoScheduleHours?.value);
+  if (!Number.isFinite(v) || v <= 0) return 24;
+  return Math.min(720, Math.max(0.1, v));
+}
+
+function formatCountdown(ms) {
+  if (ms <= 0) return '0s';
+  const total = Math.ceil(ms / 1000);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  if (h > 0) return `${h}h ${m}m ${s}s`;
+  if (m > 0) return `${m}m ${s}s`;
+  return `${s}s`;
+}
+
+function refreshAutoScheduleBadge() {
+  if (!elAutoScheduleStatus) return;
+  if (!elEnableAutoSchedule || !elEnableAutoSchedule.checked) {
+    elAutoScheduleStatus.style.display = 'none';
+    return;
+  }
+  elAutoScheduleStatus.style.display = '';
+  if (state.autoScheduleNextAt <= 0) {
+    elAutoScheduleStatus.textContent = '定时已启用';
+    return;
+  }
+  const remain = state.autoScheduleNextAt - Date.now();
+  const suffix = state.autoSchedulePending ? '（上轮跳过）' : '';
+  elAutoScheduleStatus.textContent = `下次自动跑量: ${formatCountdown(remain)}${suffix}`;
+}
+
+function scheduleNextAutoRun(reason) {
+  const hours = getAutoScheduleHours();
+  state.autoScheduleNextAt = Date.now() + hours * 3600 * 1000;
+  state.autoSchedulePending = false;
+  refreshAutoScheduleBadge();
+  if (reason) {
+    appendLog(`[定时] ${reason}，下次自动跑量将在 ${hours} 小时后`);
+  }
+}
+
+function disableAutoSchedule() {
+  state.autoScheduleNextAt = 0;
+  state.autoSchedulePending = false;
+  refreshAutoScheduleBadge();
+}
+
+function tickAutoSchedule() {
+  refreshAutoScheduleBadge();
+  if (!elEnableAutoSchedule || !elEnableAutoSchedule.checked) return;
+  if (state.autoScheduleNextAt <= 0) return;
+  if (Date.now() < state.autoScheduleNextAt) return;
+  if (state.running) {
+    state.autoSchedulePending = true;
+    appendLog('[定时] 到达定时触发时间，但当前仍在跑量中，本次跳过');
+    scheduleNextAutoRun();
+    return;
+  }
+  triggerAutoRun();
+}
+
+async function triggerAutoRun() {
+  const config = getFullConfig();
+  if (!config.baseUrl) {
+    appendLog('[定时] 无法启动：未配置 API 地址，跳过本次');
+    scheduleNextAutoRun();
+    return;
+  }
+  appendLog('[定时] 时间到，自动开始批量跑量');
+  scheduleNextAutoRun();
+  try {
+    await startBulkTask();
+  } catch (e) {
+    appendLog('[定时] 自动启动失败: ' + (e?.message || e));
+  }
+}
+
+async function startBulkTask() {
+  const config = getFullConfig();
+  if (!config.baseUrl) {
+    appendLog('[UI] 请先配置 API 地址');
+    return;
+  }
+  setRunning(true, 'bulk');
+  if (state.singleQueue.length > 0 || state.singleQueueSet.size > 0) {
+    clearSingleQueue('[UI] 检测到批量任务启动，已清空单设备队列');
+  }
+  state.devices.forEach(d => { d._status = 'pending'; d._flow = 0; d._progress = 0; d._failRemark = ''; });
+  renderDevices();
+  await window.api.startTask(config);
+}
+
 function getFullConfig() {
   const readySec = parseInt(elWifiReadyDelaySec.value, 10);
   const listRefresh = parseInt(elWifiListRefreshSec.value, 10);
+  const noProgressTimeout = parseInt(elTrafficNoProgressTimeoutSec?.value, 10);
   return {
     baseUrl: elBaseUrl.value.trim(),
     computerKey: elComputerKey.value.trim(),
@@ -437,9 +559,14 @@ function getFullConfig() {
     wifiListRefreshSec: Number.isFinite(listRefresh)
       ? Math.max(0, Math.min(3600, listRefresh))
       : 45,
+    trafficNoProgressTimeoutSec: Number.isFinite(noProgressTimeout)
+      ? Math.max(10, Math.min(86400, noProgressTimeout))
+      : 120,
     trafficMinMB: parseInt(elTrafficMinMB?.value, 10),
     trafficMaxMB: parseInt(elTrafficMaxMB?.value, 10),
     enableBlindFallback: !!(elEnableBlindFallback && elEnableBlindFallback.checked),
+    enableAutoSchedule: !!(elEnableAutoSchedule && elEnableAutoSchedule.checked),
+    autoScheduleHours: getAutoScheduleHours(),
     testUrls: state.testUrls,
   };
 }
@@ -469,6 +596,13 @@ function applyConfig(cfg) {
       elWifiListRefreshSec.value = 45;
     }
   }
+  if (elTrafficNoProgressTimeoutSec) {
+    if (cfg.trafficNoProgressTimeoutSec != null && cfg.trafficNoProgressTimeoutSec !== '') {
+      elTrafficNoProgressTimeoutSec.value = cfg.trafficNoProgressTimeoutSec;
+    } else {
+      elTrafficNoProgressTimeoutSec.value = 120;
+    }
+  }
   if (cfg.testUrls && Array.isArray(cfg.testUrls)) {
     state.testUrls = cfg.testUrls;
     renderTestUrlSelect();
@@ -483,6 +617,21 @@ function applyConfig(cfg) {
   }
   if (elEnableBlindFallback) {
     elEnableBlindFallback.checked = !!cfg.enableBlindFallback;
+  }
+  if (elAutoScheduleHours) {
+    if (cfg.autoScheduleHours != null && cfg.autoScheduleHours !== '' && Number.isFinite(Number(cfg.autoScheduleHours))) {
+      elAutoScheduleHours.value = cfg.autoScheduleHours;
+    } else {
+      elAutoScheduleHours.value = 24;
+    }
+  }
+  if (elEnableAutoSchedule) {
+    elEnableAutoSchedule.checked = !!cfg.enableAutoSchedule;
+    if (elEnableAutoSchedule.checked) {
+      scheduleNextAutoRun('已加载配置，定时已启用');
+    } else {
+      disableAutoSchedule();
+    }
   }
 }
 
@@ -509,6 +658,8 @@ window.api.onDeviceUpdate((device) => {
       _failRemark: device._failRemark ?? '',
     });
   }
+  syncDeviceScanFlagsFromWifiList();
+  renderWifiList();
   renderDevices();
 });
 
@@ -574,18 +725,7 @@ elBtnFetch.addEventListener('click', async () => {
 });
 
 elBtnStart.addEventListener('click', async () => {
-  const config = getFullConfig();
-  if (!config.baseUrl) {
-    appendLog('[UI] 请先配置 API 地址');
-    return;
-  }
-  setRunning(true, 'bulk');
-  if (state.singleQueue.length > 0 || state.singleQueueSet.size > 0) {
-    clearSingleQueue('[UI] 检测到批量任务启动，已清空单设备队列');
-  }
-  state.devices.forEach(d => { d._status = 'pending'; d._flow = 0; d._progress = 0; d._failRemark = ''; });
-  renderDevices();
-  await window.api.startTask(config);
+  await startBulkTask();
 });
 
 elBtnStop.addEventListener('click', async () => {
@@ -680,13 +820,36 @@ elBtnStopTest.addEventListener('click', async () => {
   await window.api.stopTest();
 });
 
-[elBaseUrl, elComputerKey, elBackupName, elBackupPass, elWifiReadyDelaySec, elWifiListRefreshSec, elTrafficMinMB, elTrafficMaxMB].forEach(el => {
+[elBaseUrl, elComputerKey, elBackupName, elBackupPass, elWifiReadyDelaySec, elWifiListRefreshSec, elTrafficNoProgressTimeoutSec, elTrafficMinMB, elTrafficMaxMB].forEach(el => {
   if (el) el.addEventListener('input', scheduleSaveConfig);
 });
 
 if (elEnableBlindFallback) {
   elEnableBlindFallback.addEventListener('change', scheduleSaveConfig);
 }
+
+if (elEnableAutoSchedule) {
+  elEnableAutoSchedule.addEventListener('change', () => {
+    if (elEnableAutoSchedule.checked) {
+      scheduleNextAutoRun('定时跑量已启用');
+    } else {
+      disableAutoSchedule();
+      appendLog('[定时] 定时跑量已关闭');
+    }
+    scheduleSaveConfig();
+  });
+}
+
+if (elAutoScheduleHours) {
+  elAutoScheduleHours.addEventListener('input', scheduleSaveConfig);
+  elAutoScheduleHours.addEventListener('change', () => {
+    if (elEnableAutoSchedule && elEnableAutoSchedule.checked) {
+      scheduleNextAutoRun(`间隔已更新为 ${getAutoScheduleHours()} 小时`);
+    }
+  });
+}
+
+setInterval(tickAutoSchedule, 1000);
 
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'F1') return;

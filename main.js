@@ -150,6 +150,19 @@ function formatScannedSsidList(networks) {
     .join('、');
 }
 
+function getNewScannedNetworks(existingLookup, networks) {
+  if (!Array.isArray(networks) || networks.length === 0) return [];
+  const seen = new Set();
+  const added = [];
+  for (const n of networks) {
+    const key = WifiManager.normalizeSsid(n.ssid);
+    if (!key || seen.has(key) || existingLookup.has(key)) continue;
+    seen.add(key);
+    added.push(n);
+  }
+  return added;
+}
+
 /** 每个 SSID（规范化）保留信号最强的一条扫描记录 */
 function buildScanLookup(networks) {
   const map = new Map();
@@ -220,10 +233,29 @@ function resolveWifiListRefreshSec(config) {
   return 45;
 }
 
+function resolveTrafficNoProgressTimeoutSec(config) {
+  const raw = config && config.trafficNoProgressTimeoutSec;
+  if (Number.isFinite(Number(raw))) {
+    return Math.max(10, Math.min(86400, Math.floor(Number(raw))));
+  }
+  return 120;
+}
+
 function formatBytes(bytes) {
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function formatTrafficDownloadEvent(evt, prefix = '') {
+  const entry = evt.entry || {};
+  const url = entry.url || evt.url || '';
+  const name = entry.name ? `（${entry.name}）` : '';
+  const progress = `${formatBytes(evt.totalDownloaded || 0)} / ${formatBytes(evt.targetBytes || 0)}`;
+  if (evt.type === 'redirect') {
+    return `${prefix}[下载] 换源: 原因=${evt.reason || '重定向'}，累计已下载=${progress}，当前链接${name}: ${url}`;
+  }
+  return `${prefix}[下载] 换源: 原因=${evt.reason || '未知'}，累计已下载=${progress}，当前链接${name}: ${url}`;
 }
 
 /** netsh connect 成功后再次读取系统当前 SSID，避免日志显示已连上但实际未关联到目标网络 */
@@ -480,6 +512,7 @@ async function processOneDevice(device, scanState, config) {
 
   const speedStartTime = formatTime(new Date());
   const targetMB = randomTargetMB(config);
+  const noProgressTimeoutSec = resolveTrafficNoProgressTimeoutSec(config);
   log(`开始跑流量，目标约 ${targetMB} MB...`);
   trafficGenerator = new TrafficGenerator(testUrls);
   let downloadedBytes = 0;
@@ -488,7 +521,8 @@ async function processOneDevice(device, scanState, config) {
   try {
     downloadedBytes = await trafficGenerator.generate({
       targetMB,
-      onDownloadUrl: (u) => log(`[下载] 当前链接: ${u}`),
+      noProgressTimeoutMs: noProgressTimeoutSec * 1000,
+      onDownloadEvent: (evt) => log(formatTrafficDownloadEvent(evt)),
       onProgress: (downloaded, target) => {
         device._flow = downloaded;
         const now = Date.now();
@@ -588,6 +622,7 @@ async function processOneDeviceBlind(device, config) {
 
   const speedStartTime = formatTime(new Date());
   const targetMB = randomTargetMB(config);
+  const noProgressTimeoutSec = resolveTrafficNoProgressTimeoutSec(config);
   log(`[兜底] 开始跑流量，目标约 ${targetMB} MB...`);
   trafficGenerator = new TrafficGenerator(testUrls);
   let downloadedBytes = 0;
@@ -596,7 +631,8 @@ async function processOneDeviceBlind(device, config) {
   try {
     downloadedBytes = await trafficGenerator.generate({
       targetMB,
-      onDownloadUrl: (u) => log(`[兜底][下载] 当前链接: ${u}`),
+      noProgressTimeoutMs: noProgressTimeoutSec * 1000,
+      onDownloadEvent: (evt) => log(formatTrafficDownloadEvent(evt, '[兜底]')),
       onProgress: (downloaded, target) => {
         device._flow = downloaded;
         const now = Date.now();
@@ -763,13 +799,14 @@ ipcMain.handle('start-task', async (_e, config) => {
         wifiRefreshInFlight = true;
         try {
           const nets = await wifiManager.scan(true);
+          const newNets = getNewScannedNetworks(scanState.lookup, nets);
           scanState.merge(nets);
           applyScanFlagsToDevices(devices, scanState.lookup);
           sendWifiList(nets);
-          const ssidList = formatScannedSsidList(nets);
+          const newSsidList = formatScannedSsidList(newNets);
           log(
-            `[WiFi] 定时刷新：${nets.length} 个网络` +
-              (ssidList ? `\n  SSID 列表: ${ssidList}` : '')
+            `[WiFi] 定时刷新：${nets.length} 个网络，新增 ${newNets.length} 个` +
+              (newSsidList ? `\n  新增 SSID: ${newSsidList}` : '')
           );
         } catch (e) {
           log(`[WiFi] 定时刷新失败: ${e.message}`);

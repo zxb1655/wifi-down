@@ -46,8 +46,14 @@ function requestOptionsForUrl(url, referer, overrides = {}) {
 // 若 stall 阈值过小，会把仅仅是"事件循环被扫描调用短暂卡住"误判成下载停滞。
 const STALL_TIMEOUT = 30000;
 const DOWNLOAD_TIMEOUT = 60000;
-// 连续 N 毫秒没下载到任何字节，判定当前 WiFi 无可用网络，放弃本设备
-const NO_NETWORK_TIMEOUT = 2 * 60 * 1000;
+// 连续 N 毫秒没有任何新增下载量，判定当前 WiFi 无可用网络，放弃本设备
+const NO_PROGRESS_TIMEOUT = 2 * 60 * 1000;
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
 
 class TrafficGenerator {
   constructor(testUrls = null) {
@@ -83,25 +89,45 @@ class TrafficGenerator {
       throw new Error('未配置测速链接（config.json 中 testUrls 为空或无效）');
     }
 
-    const noNetworkTimeoutMs = Number.isFinite(Number(opts.noNetworkTimeoutMs))
-      ? Number(opts.noNetworkTimeoutMs)
-      : NO_NETWORK_TIMEOUT;
-    const startTime = Date.now();
+    const noProgressTimeoutMs = Number.isFinite(Number(opts.noProgressTimeoutMs))
+      ? Number(opts.noProgressTimeoutMs)
+      : Number.isFinite(Number(opts.noNetworkTimeoutMs))
+        ? Number(opts.noNetworkTimeoutMs)
+        : NO_PROGRESS_TIMEOUT;
+    let lastProgressTime = Date.now();
+    let nextSourceReason = '开始下载';
+    const onDownloadEvent = typeof opts.onDownloadEvent === 'function' ? opts.onDownloadEvent : null;
 
     while (totalDownloaded < targetBytes && !this._aborted) {
-      if (totalDownloaded === 0 && Date.now() - startTime >= noNetworkTimeoutMs) {
-        throw new Error(`网络不可用（${Math.round(noNetworkTimeoutMs / 1000)} 秒内未下载到任何数据）`);
+      if (Date.now() - lastProgressTime >= noProgressTimeoutMs) {
+        throw new Error(`网络不可用（最近 ${Math.round(noProgressTimeoutMs / 1000)} 秒内没有新增下载量）`);
       }
       const entry = this._entries[Math.floor(Math.random() * this._entries.length)];
+      if (onDownloadEvent) {
+        onDownloadEvent({
+          type: 'source',
+          reason: nextSourceReason,
+          totalDownloaded,
+          targetBytes,
+          entry,
+        });
+      }
+      const beforeDownload = totalDownloaded;
       try {
         await this._downloadOne(entry, targetBytes - totalDownloaded, (chunkBytes) => {
           totalDownloaded += chunkBytes;
+          if (chunkBytes > 0) lastProgressTime = Date.now();
           onProgress(totalDownloaded, targetBytes);
-        }, onDownloadUrl);
+        }, onDownloadUrl, onDownloadEvent, totalDownloaded, targetBytes);
+        const delta = totalDownloaded - beforeDownload;
+        nextSourceReason = delta > 0
+          ? `上一源结束，已下载 ${formatBytes(delta)}`
+          : '上一源结束但未下载到数据';
       } catch (e) {
         if (this._aborted) break;
-        if (totalDownloaded === 0 && Date.now() - startTime >= noNetworkTimeoutMs) {
-          throw new Error(`网络不可用（${Math.round(noNetworkTimeoutMs / 1000)} 秒内未下载到任何数据）`);
+        nextSourceReason = `上一源失败: ${e.message || '未知错误'}`;
+        if (Date.now() - lastProgressTime >= noProgressTimeoutMs) {
+          throw new Error(`网络不可用（最近 ${Math.round(noProgressTimeoutMs / 1000)} 秒内没有新增下载量；最后一次错误: ${e.message || '未知错误'}）`);
         }
         await new Promise(r => setTimeout(r, 1000));
       }
@@ -110,7 +136,7 @@ class TrafficGenerator {
     return totalDownloaded;
   }
 
-  _downloadOne(entry, remainingBytes, onChunk, onDownloadUrl) {
+  _downloadOne(entry, remainingBytes, onChunk, onDownloadUrl, onDownloadEvent, totalDownloaded = 0, targetBytes = 0) {
     const { url, referer } = normalizeTestEntry(entry);
 
     return new Promise((resolve, reject) => {
@@ -160,7 +186,17 @@ class TrafficGenerator {
           cleanup();
           const loc = res.headers.location.trim();
           const nextUrl = /^https?:\/\//i.test(loc) ? loc : new URL(loc, url).href;
-          this._downloadOne({ url: nextUrl, referer }, remainingBytes, onChunk, onDownloadUrl)
+          if (onDownloadEvent) {
+            onDownloadEvent({
+              type: 'redirect',
+              reason: `HTTP ${res.statusCode} 重定向`,
+              totalDownloaded,
+              targetBytes,
+              fromUrl: url,
+              entry: { url: nextUrl, referer },
+            });
+          }
+          this._downloadOne({ url: nextUrl, referer }, remainingBytes, onChunk, onDownloadUrl, onDownloadEvent, totalDownloaded, targetBytes)
             .then(resolve).catch(reject);
           res.resume();
           return;

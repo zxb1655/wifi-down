@@ -159,6 +159,21 @@ body {
   margin-left: auto;
 }
 
+.schedule-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: var(--warning-light);
+  color: var(--warning);
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.schedule-badge + .status-badge {
+  margin-left: 0;
+}
+
 .status-badge.running {
   background: var(--primary);
   animation: pulse 2s ease-in-out infinite;
@@ -212,6 +227,16 @@ body {
   color: var(--primary);
   padding: 2px 8px;
   border-radius: 10px;
+}
+
+.count-badge-success {
+  background: var(--success-light);
+  color: #059669;
+}
+
+.count-badge-primary {
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .panel-content {

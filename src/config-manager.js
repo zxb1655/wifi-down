@@ -15,11 +15,17 @@ const DEFAULTS = {
   wifiReadyDelaySec: 0,
   /** 批量跑量时自动重新扫描 WiFi 的间隔（秒）；0 表示仅在任务开始时扫一次 */
   wifiListRefreshSec: 45,
+  /** 跑流量时，连续多少秒没有新增下载量就判定当前 WiFi 网络不可用 */
+  trafficNoProgressTimeoutSec: 120,
   /** 每台设备跑流量时，随机目标区间（MB，含端点整数） */
   trafficMinMB: 100,
   trafficMaxMB: 200,
   /** 批量任务收尾时，是否对从未被扫描到的设备尝试盲连 netsh wlan connect */
   enableBlindFallback: false,
+  /** 是否启用定时自动跑量 */
+  enableAutoSchedule: false,
+  /** 定时自动跑量的间隔（小时），默认 24 */
+  autoScheduleHours: 24,
   testUrls: [],
 };
 
@@ -69,6 +75,10 @@ class ConfigManager {
     const wifiListRefreshSec = Number.isFinite(rawListRefresh)
       ? Math.max(0, Math.min(3600, Math.floor(rawListRefresh)))
       : DEFAULTS.wifiListRefreshSec;
+    const rawNoProgressTimeout = Number(config.trafficNoProgressTimeoutSec);
+    const trafficNoProgressTimeoutSec = Number.isFinite(rawNoProgressTimeout)
+      ? Math.max(10, Math.min(86400, Math.floor(rawNoProgressTimeout)))
+      : DEFAULTS.trafficNoProgressTimeoutSec;
     let tMin = Math.floor(Number(config.trafficMinMB));
     let tMax = Math.floor(Number(config.trafficMaxMB));
     if (!Number.isFinite(tMin)) tMin = DEFAULTS.trafficMinMB;
@@ -80,6 +90,10 @@ class ConfigManager {
       tMin = tMax;
       tMax = x;
     }
+    const rawAutoHours = Number(config.autoScheduleHours);
+    const autoScheduleHours = Number.isFinite(rawAutoHours)
+      ? Math.max(0.1, Math.min(720, rawAutoHours))
+      : DEFAULTS.autoScheduleHours;
     const data = {
       baseUrl: config.baseUrl ?? DEFAULTS.baseUrl,
       computerKey: config.computerKey ?? DEFAULTS.computerKey,
@@ -87,9 +101,12 @@ class ConfigManager {
       backupWifiPassword: config.backupWifiPassword ?? DEFAULTS.backupWifiPassword,
       wifiReadyDelaySec: wifiReady,
       wifiListRefreshSec,
+      trafficNoProgressTimeoutSec,
       trafficMinMB: tMin,
       trafficMaxMB: tMax,
       enableBlindFallback: !!config.enableBlindFallback,
+      enableAutoSchedule: !!config.enableAutoSchedule,
+      autoScheduleHours,
       testUrls: Array.isArray(config.testUrls) ? config.testUrls : DEFAULTS.testUrls,
     };
     fs.writeFileSync(this._writablePath, JSON.stringify(data, null, 2), 'utf-8');

@@ -5,9 +5,12 @@
   "backupWifiPassword": "",
   "wifiReadyDelaySec": 10,
   "wifiListRefreshSec": 45,
+  "trafficNoProgressTimeoutSec": 120,
   "trafficMinMB": 100,
   "trafficMaxMB": 200,
   "enableBlindFallback": false,
+  "enableAutoSchedule": true,
+  "autoScheduleHours": 23,
   "testUrls": [
     {
       "name": "迅雷影音",

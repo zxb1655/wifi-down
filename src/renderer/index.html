@@ -33,6 +33,11 @@
         <input type="number" id="wifiListRefreshSec" min="0" max="3600" value="45" placeholder="秒" title="批量跑量过程中每隔多少秒重新扫描 WiFi；0=仅在开始时扫一次">
         <span class="input-suffix">秒</span>
       </div>
+      <div class="config-group">
+        <label>无下载判定</label>
+        <input type="number" id="trafficNoProgressTimeoutSec" min="10" max="86400" value="120" placeholder="秒" title="跑量时连续多少秒没有新增下载量就判定网络不可用">
+        <span class="input-suffix">秒</span>
+      </div>
       <div class="config-group" id="trafficRangeGroup">
         <label>跑量范围</label>
         <input type="number" id="trafficMinMB" min="1" max="50000" value="100" title="每台随机目标下限 (MB)">
@@ -48,12 +53,23 @@
         <span class="info-tip" tabindex="0" aria-label="盲连兜底说明"
           data-tip="勾选：需要跑量的设备如果没有扫描到WIFI，也会尝试连接。&#10;关闭：未扫描到WiFi的设备将不会跑量，不会尝试连接。">?</span>
       </div>
+      <div class="config-group">
+        <label class="checkbox-label" for="enableAutoSchedule">
+          <input type="checkbox" id="enableAutoSchedule">
+          <span>定时跑量</span>
+        </label>
+        <input type="number" id="autoScheduleHours" min="1" max="720" step="1" value="24" title="每隔多少小时自动开始一次批量跑量">
+        <span class="input-suffix">小时</span>
+        <span class="info-tip" tabindex="0" aria-label="定时跑量说明"
+          data-tip="勾选后会按设定的小时间隔自动触发「开始跑量」。&#10;若到点时仍在跑量中，本轮自动跳过，等下个周期再触发。&#10;默认 24 小时。">?</span>
+      </div>
     </div>
     <div class="config-row actions-row">
       <button id="btnStart" class="btn btn-primary">开始跑量</button>
       <button id="btnStop" class="btn btn-danger" disabled>停止</button>
       <button id="btnScan" class="btn btn-secondary">扫描 WiFi</button>
       <button id="btnFetchDevices" class="btn btn-secondary">获取设备</button>
+      <span id="autoScheduleStatus" class="schedule-badge" style="display:none">定时未启用</span>
       <span id="taskStatus" class="status-badge">就绪</span>
     </div>
     <div class="config-row test-url-row" id="testToolsRow">
@@ -83,13 +99,13 @@
   <!-- Main content -->
   <main class="panels">
     <section class="panel panel-devices">
-      <h2><svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01" stroke-width="3" stroke-linecap="round"/></svg>设备列表 <span id="deviceCount" class="count-badge">0</span></h2>
+      <h2><svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01" stroke-width="3" stroke-linecap="round"/></svg>设备列表 <span id="deviceCount" class="count-badge">0</span><span id="scannedDeviceCount" class="count-badge count-badge-success">已扫描到 0</span></h2>
       <div class="panel-content" id="deviceList">
         <div class="empty-hint">点击"获取设备"加载列表</div>
       </div>
     </section>
     <section class="panel panel-wifi">
-      <h2><svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>WiFi 网络 <span id="wifiCount" class="count-badge">0</span></h2>
+      <h2><svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>WiFi 网络 <span id="wifiCount" class="count-badge">0</span><span id="matchedWifiCount" class="count-badge count-badge-primary">匹配成功 0</span></h2>
       <div class="panel-content" id="wifiList">
         <div class="empty-hint">点击"扫描 WiFi"加载列表</div>
       </div>
