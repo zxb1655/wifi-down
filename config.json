@@ -5,7 +5,7 @@
   "backupWifiPassword": "",
   "wifiReadyDelaySec": 10,
   "wifiListRefreshSec": 45,
-  "trafficNoProgressTimeoutSec": 120,
+  "trafficNoProgressTimeoutSec": 300,
   "trafficMinMB": 100,
   "trafficMaxMB": 200,
   "enableBlindFallback": false,

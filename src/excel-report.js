@@ -37,6 +37,14 @@ function deviceStatusLabel(status) {
   return status || '未知';
 }
 
+function failureCategoryLabel(d) {
+  if (!d || d._status !== 'failed') return '';
+  if ((d._flow || 0) > 0) return '有部分跑量';
+  const r = String(d._failRemark || '');
+  if (/未扫描到|连接失败|盲连|未配置测速/.test(r)) return '无跑量(扫描/连接)';
+  return '无跑量';
+}
+
 /**
  * 生成跑量结果 Excel 报表
  * @param {Object} opts
@@ -57,6 +65,9 @@ async function generateRunReport({ outDir, devices, startedAt, endedAt, title })
   const total = list.length;
   const successList = list.filter((d) => d && d._status === 'success');
   const failedList = list.filter((d) => d && d._status === 'failed');
+  const partialFailList = failedList.filter((d) => (d._flow || 0) > 0);
+  const partialFailMB = partialFailList.reduce((s, d) => s + bytesToMB(d._flow || 0), 0);
+  const zeroFlowFailCount = failedList.length - partialFailList.length;
   const otherList = list.filter(
     (d) => d && d._status !== 'success' && d._status !== 'failed',
   );
@@ -88,6 +99,9 @@ async function generateRunReport({ outDir, devices, startedAt, endedAt, title })
     ['设备总数', total],
     ['成功数', successList.length],
     ['失败数', failedList.length],
+    ['失败但有部分跑量（台数）', partialFailList.length],
+    ['失败但有部分跑量合计 (MB)', Math.round(partialFailMB * 100) / 100],
+    ['纯失败无跑量（台数）', zeroFlowFailCount],
     ['其他状态数', otherList.length],
     ['成功率', successRate],
     ['成功设备累计跑量 (MB)', Math.round(totalSuccessMB * 100) / 100],
@@ -103,6 +117,7 @@ async function generateRunReport({ outDir, devices, startedAt, endedAt, title })
     { header: 'WiFi 名称', key: 'wifiName', width: 24 },
     { header: 'WiFi 密码', key: 'wifiPassword', width: 18 },
     { header: '状态', key: 'status', width: 8 },
+    { header: '失败分类', key: 'failCategory', width: 16 },
     { header: '跑量 (MB)', key: 'flowMB', width: 12 },
     { header: '失败原因 / 备注', key: 'remark', width: 60 },
   ];
@@ -131,6 +146,7 @@ async function generateRunReport({ outDir, devices, startedAt, endedAt, title })
       wifiName: d?.wifiName || '',
       wifiPassword: d?.wifiPassword || '',
       status: deviceStatusLabel(status),
+      failCategory: failureCategoryLabel(d),
       flowMB: status === 'success' ? bytesToMB(d?._flow || 0) : (d?._flow ? bytesToMB(d._flow) : 0),
       remark: status === 'success' ? '' : (d?._failRemark || ''),
     });
@@ -148,6 +164,16 @@ async function generateRunReport({ outDir, devices, startedAt, endedAt, title })
         fgColor: { argb: 'FFFFC7CE' },
       };
       row.getCell('status').font = { color: { argb: 'FF9C0006' }, bold: true };
+      if ((d?._flow || 0) > 0) {
+        const flowCell = row.getCell('flowMB');
+        flowCell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFF2CC' },
+        };
+        const catCell = row.getCell('failCategory');
+        catCell.font = { color: { argb: 'FF7F6000' }, bold: true };
+      }
     }
     row.alignment = { vertical: 'middle', wrapText: true };
   });

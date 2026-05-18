@@ -98,7 +98,7 @@ function normalizeSsidMatch(ssid) {
   return s.normalize('NFKC');
 }
 
-/** 根据当前 WiFi 扫描结果为设备打上「是否在本轮列表中」标记 */
+/** 根据当前 WiFi 扫描结果为设备打上「是否在本轮列表中」标记（曾扫到则保持，避免下载时因连上热点而从列表消失） */
 function syncDeviceScanFlagsFromWifiList() {
   const best = new Map();
   for (const w of state.wifiList) {
@@ -111,22 +111,60 @@ function syncDeviceScanFlagsFromWifiList() {
   state.devices.forEach((d) => {
     const k = normalizeSsidMatch(d.wifiName);
     const hit = k && best.has(k);
-    d._scanVisible = !!hit;
-    d._scanSignal = hit ? best.get(k).signal : '';
+    if (hit) {
+      d._scanVisible = true;
+      d._scanSignal = best.get(k).signal;
+    } else if (!d._scanVisible) {
+      d._scanSignal = '';
+    }
   });
 }
 
-/** 展示顺序：已扫描到的在上，其次信号强度，再按 SN */
+function nextDisplayOrder() {
+  let max = -1;
+  for (const d of state.devices) {
+    if (d._displayOrder != null && d._displayOrder > max) max = d._displayOrder;
+  }
+  return max + 1;
+}
+
+/** 跑量中的设备置顶，便于盯住进度条 */
+function deviceDisplayRank(d) {
+  const status = d._status || 'pending';
+  if (status === 'processing') return 0;
+  if (d._queued || (d.sn && d.sn === state.singleCurrentSn)) return 1;
+  return 2;
+}
+
+/** 展示顺序：运行中/排队 > 已扫描到 > 信号强度 > 稳定序号 */
 function sortDevicesForDisplay(list) {
   return [...list].sort((a, b) => {
+    const ra = deviceDisplayRank(a);
+    const rb = deviceDisplayRank(b);
+    if (ra !== rb) return ra - rb;
     const av = !!a._scanVisible;
     const bv = !!b._scanVisible;
     if (av !== bv) return (bv ? 1 : 0) - (av ? 1 : 0);
     const ap = parseSignalPercent(a._scanSignal || '');
     const bp = parseSignalPercent(b._scanSignal || '');
     if (bp !== ap) return bp - ap;
+    const oa = a._displayOrder ?? 0;
+    const ob = b._displayOrder ?? 0;
+    if (oa !== ob) return oa - ob;
     return String(a.sn || '').localeCompare(String(b.sn || ''));
   });
+}
+
+/** 仅更新进度条与流量，避免高频全量重排导致列表跳动 */
+function patchDeviceProgressInDom(sn, progress, flow) {
+  if (!sn || !elDeviceList) return false;
+  const row = elDeviceList.querySelector(`.device-item[data-sn="${CSS.escape(sn)}"]`);
+  if (!row) return false;
+  const fill = row.querySelector('.progress-bar-fill');
+  if (fill) fill.style.width = `${progress}%`;
+  const flowEl = row.querySelector('.device-flow');
+  if (flowEl) flowEl.textContent = flow > 0 ? formatBytes(flow) : '-';
+  return true;
 }
 
 function buildSignalBars(signal) {
@@ -656,6 +694,7 @@ window.api.onDeviceUpdate((device) => {
       _flow: device._flow ?? 0,
       _progress: device._progress ?? 0,
       _failRemark: device._failRemark ?? '',
+      _displayOrder: nextDisplayOrder(),
     });
   }
   syncDeviceScanFlagsFromWifiList();
@@ -668,7 +707,9 @@ window.api.onProgress(({ sn, downloaded, target }) => {
   if (dev) {
     dev._flow = downloaded;
     dev._progress = target > 0 ? Math.min(100, (downloaded / target) * 100) : 0;
-    renderDevices();
+    if (!patchDeviceProgressInDom(sn, dev._progress, downloaded)) {
+      renderDevices();
+    }
   }
 });
 
@@ -706,7 +747,7 @@ elBtnFetch.addEventListener('click', async () => {
   appendLog('[UI] 正在获取设备列表...');
   try {
     const devices = await window.api.fetchDevices(getFullConfig());
-    state.devices = devices.map(d => ({
+    state.devices = devices.map((d, i) => ({
       ...d,
       _status: 'pending',
       _flow: 0,
@@ -714,6 +755,7 @@ elBtnFetch.addEventListener('click', async () => {
       _failRemark: '',
       _scanVisible: false,
       _scanSignal: '',
+      _displayOrder: i,
     }));
     syncDeviceScanFlagsFromWifiList();
     renderDevices();
