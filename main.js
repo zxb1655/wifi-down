@@ -6,6 +6,7 @@ const WifiManager = require('./src/wifi-manager');
 const TrafficGenerator = require('./src/traffic-generator');
 const ApiClient = require('./src/api-client');
 const ConfigManager = require('./src/config-manager');
+const { generateRunReport } = require('./src/excel-report');
 
 // 仅允许一个进程：副本在未注册 IPC 前即退出；主实例在再次启动时聚焦窗口
 if (!app.requestSingleInstanceLock()) {
@@ -793,11 +794,13 @@ ipcMain.handle('start-task', async (_e, config) => {
   const { baseUrl, backupWifiName, backupWifiPassword } = config;
   apiClient.setBaseUrl(baseUrl);
 
+  const taskStartedAt = new Date();
+  let devices = [];
+
   try {
     log('===== 开始跑量任务 =====');
 
     log('正在获取设备列表...');
-    let devices;
     try {
       devices = await fetchDevicesWithNetworkFallback(config);
     } catch (e) {
@@ -1012,12 +1015,45 @@ ipcMain.handle('start-task', async (_e, config) => {
     log(`任务异常: ${e.message}`);
   } finally {
     await reconnectBackupWifiAfterTask(config);
+    try {
+      await writeRunReport({
+        devices,
+        startedAt: taskStartedAt,
+        endedAt: new Date(),
+        title: batchStopRequested ? '跑量任务报表（用户中止）' : '跑量任务报表',
+      });
+    } catch (e) {
+      log(`[报表] 生成 Excel 报表失败: ${e.message}`);
+    }
     running = false;
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('task-done');
     }
   }
 });
+
+async function writeRunReport({ devices, startedAt, endedAt, title }) {
+  if (!Array.isArray(devices) || devices.length === 0) {
+    log('[报表] 本次任务没有设备数据，跳过生成 Excel 报表');
+    return;
+  }
+  if (!logDir) {
+    log('[报表] 日志目录未初始化，无法生成 Excel 报表');
+    return;
+  }
+  const filePath = await generateRunReport({
+    outDir: logDir,
+    devices,
+    startedAt,
+    endedAt,
+    title,
+  });
+  const successCount = devices.filter((d) => d?._status === 'success').length;
+  const failedCount = devices.filter((d) => d?._status === 'failed').length;
+  log(
+    `[报表] 已生成 Excel: ${filePath}（共 ${devices.length} 台，成功 ${successCount}，失败 ${failedCount}）`,
+  );
+}
 
 async function reportResult(device, downloadedBytes, success, config, startTime, endTime, remark) {
   const { baseUrl, backupWifiName, backupWifiPassword } = config;
